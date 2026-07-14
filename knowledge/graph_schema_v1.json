@@ -1,0 +1,143 @@
+{
+  "schema_version": "1",
+  "generated_by": "knowledge/graph_schema.py",
+  "description": "Snapshot do contrato do Knowledge Graph STRIDE para outros devs mockarem sem instalar o pacote.",
+  "nodes": {
+    "ElementType": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "description": "str"
+      },
+      "values": ["process", "data_store", "data_flow", "external_entity"]
+    },
+    "STRIDECategory": {
+      "fields": {
+        "id": "str",
+        "letter": "str",
+        "name": "str",
+        "description": "str"
+      },
+      "values": [
+        {"id": "stride-s", "letter": "S", "name": "Spoofing"},
+        {"id": "stride-t", "letter": "T", "name": "Tampering"},
+        {"id": "stride-r", "letter": "R", "name": "Repudiation"},
+        {"id": "stride-i", "letter": "I", "name": "InformationDisclosure"},
+        {"id": "stride-d", "letter": "D", "name": "DenialOfService"},
+        {"id": "stride-e", "letter": "E", "name": "ElevationOfPrivilege"}
+      ]
+    },
+    "Threat": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "description": "str",
+        "severity": "Literal['critical','high','medium','low']"
+      }
+    },
+    "Mitigation": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "description": "str",
+        "control_type": "Literal['preventive','detective','corrective']"
+      }
+    },
+    "CloudService": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "provider": "Literal['aws','azure','gcp','generic']",
+        "element_type": "str",
+        "category": "str"
+      },
+      "reference_architecture_services": [
+        {"name": "Route 53",              "provider": "aws", "element_type": "process",         "category": "networking"},
+        {"name": "Elastic Load Balancing","provider": "aws", "element_type": "process",         "category": "networking"},
+        {"name": "EC2",                   "provider": "aws", "element_type": "process",         "category": "compute"},
+        {"name": "ElastiCache",           "provider": "aws", "element_type": "data_store",      "category": "database"},
+        {"name": "RDS",                   "provider": "aws", "element_type": "data_store",      "category": "database"},
+        {"name": "S3",                    "provider": "aws", "element_type": "data_store",      "category": "storage"},
+        {"name": "CloudFront",            "provider": "aws", "element_type": "process",         "category": "networking"},
+        {"name": "CloudWatch",            "provider": "aws", "element_type": "process",         "category": "monitoring"},
+        {"name": "SNS",                   "provider": "aws", "element_type": "process",         "category": "integration"},
+        {"name": "DynamoDB",              "provider": "aws", "element_type": "data_store",      "category": "database"},
+        {"name": "SES",                   "provider": "aws", "element_type": "process",         "category": "integration"},
+        {"name": "External Entity",       "provider": "generic", "element_type": "external_entity", "category": "external"}
+      ]
+    },
+    "Source": {
+      "fields": {
+        "id": "str",
+        "url": "str",
+        "title": "str",
+        "crawled_at": "str (ISO-8601)",
+        "stride_tags": "list[str]"
+      }
+    }
+  },
+  "relationships": [
+    {"type": "SUSCETIVEL_A",              "from": "ElementType",    "to": "STRIDECategory", "properties": {"severity": "str"}},
+    {"type": "INCLUI_AMEACA",             "from": "STRIDECategory", "to": "Threat",         "properties": {}},
+    {"type": "MITIGADA_POR",              "from": "Threat",         "to": "Mitigation",     "properties": {}},
+    {"type": "INSTANCIA_DE",              "from": "CloudService",   "to": "ElementType",    "properties": {}},
+    {"type": "POSSUI_AMEACA_ESPECIFICA",  "from": "CloudService",   "to": "Threat",         "properties": {}},
+    {"type": "POSSUI_MITIGACAO_ESPECIFICA","from": "CloudService",  "to": "Mitigation",     "properties": {}},
+    {"type": "REFERENCIADA_EM",           "from": "Mitigation",     "to": "Source",         "properties": {}},
+    {"type": "COVERS_SERVICE",            "from": "Source",         "to": "CloudService",   "properties": {}},
+    {"type": "COVERS_CATEGORY",           "from": "Source",         "to": "STRIDECategory", "properties": {}}
+  ],
+  "stride_matrix": {
+    "process":         ["S", "T", "R", "I", "D", "E"],
+    "data_store":      ["T", "R", "I", "D"],
+    "data_flow":       ["T", "I", "D"],
+    "external_entity": ["S", "R"]
+  },
+  "pydantic_models": {
+    "ThreatResult": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "description": "str",
+        "severity": "Literal['critical','high','medium','low']"
+      }
+    },
+    "MitigationResult": {
+      "fields": {
+        "id": "str",
+        "name": "str",
+        "description": "str",
+        "control_type": "Literal['preventive','detective','corrective']"
+      }
+    },
+    "STRIDEResult": {
+      "fields": {
+        "category": "str",
+        "letter": "str",
+        "threats": "list[ThreatResult]",
+        "mitigations": "list[MitigationResult]"
+      }
+    },
+    "KGQueryResult": {
+      "fields": {
+        "element_type": "str",
+        "cloud_service": "Optional[str]",
+        "stride_results": "list[STRIDEResult]",
+        "total_threats": "int",
+        "query_source": "Literal['taxonomy','enriched','both']"
+      }
+    }
+  },
+  "public_api": {
+    "get_stride_threats": {
+      "signature": "get_stride_threats(element_type: str, cloud_service: Optional[str] = None, driver: Optional[Driver] = None) -> KGQueryResult",
+      "module": "knowledge.query",
+      "status": "stub (Épico 1) — implementação completa no Épico 4"
+    },
+    "get_fixture_for": {
+      "signature": "get_fixture_for(element_type: str) -> KGQueryResult",
+      "module": "knowledge.fixtures",
+      "status": "disponível desde o Épico 1"
+    }
+  }
+}
