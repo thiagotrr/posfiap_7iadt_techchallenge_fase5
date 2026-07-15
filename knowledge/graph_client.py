@@ -13,12 +13,12 @@ import logging
 import os
 from typing import Optional
 
-from neo4j import GraphDatabase, Driver
+from neo4j import GraphDatabase, Driver, Session
 
 logger = logging.getLogger(__name__)
 
 _driver: Optional[Driver] = None
-
+_database: Optional[str]= None
 
 def get_driver() -> Driver:
     """Retorna o driver Neo4j singleton, criando-o na primeira chamada."""
@@ -27,6 +27,7 @@ def get_driver() -> Driver:
         uri = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
         user = os.environ.get("NEO4J_USER", "neo4j")
         password = os.environ.get("NEO4J_PASSWORD", "")
+        _database = os.environ.get("NEO4J_DATABASE", "neo4j")
         if not password:
             raise RuntimeError(
                 "NEO4J_PASSWORD environment variable is required but not set."
@@ -36,6 +37,9 @@ def get_driver() -> Driver:
         atexit.register(_close_driver)
     return _driver
 
+def get_session() -> Session:
+    """Retorna uma sessão apontado para NEO4J_DATABASE. Utilizar esta invés de driver.session()."""
+    return get_driver().session(database=_database or "neo4j")
 
 def _close_driver() -> None:
     global _driver

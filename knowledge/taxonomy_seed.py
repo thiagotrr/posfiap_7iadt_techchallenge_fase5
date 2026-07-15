@@ -21,6 +21,7 @@ Uso:
 """
 
 from __future__ import annotations
+from knowledge.graph_client import get_session
 
 import logging
 import os
@@ -238,7 +239,7 @@ def run_seed(driver: Driver) -> None:
     nodes_created = 0
     rels_created = 0
 
-    with driver.session() as session:
+    with get_session()() as session:
         # ------------------------------------------------------------------
         # 1. Constraints de unicidade
         # ------------------------------------------------------------------

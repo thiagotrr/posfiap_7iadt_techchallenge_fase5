@@ -13,7 +13,7 @@ import logging
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from knowledge.graph_client import get_driver
+from knowledge.graph_client import get_session
 from knowledge.graph_schema import (
     NODE_ELEMENT_TYPE,
     NODE_STRIDE_CATEGORY,
@@ -35,8 +35,7 @@ def knowledge_health() -> JSONResponse:
         503 — Neo4j não está acessível.
     """
     try:
-        driver = get_driver()
-        with driver.session() as session:
+        with get_session() as session:
             counts = {}
             for label, key in [
                 (NODE_ELEMENT_TYPE, "element_types"),
