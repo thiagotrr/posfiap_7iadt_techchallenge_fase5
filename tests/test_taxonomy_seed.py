@@ -9,6 +9,7 @@ Marque com @pytest.mark.integration para separar dos testes unitários.
 """
 import os
 import pytest
+from dotenv import load_dotenv
 
 # ---------------------------------------------------------------------------
 # Testes unitários (sem Neo4j) — validam estrutura dos dados do seed
@@ -22,6 +23,7 @@ from knowledge.graph_schema import (
 )
 from knowledge.taxonomy_seed import _ELEMENT_TYPES, _STRIDE_CATEGORIES, _THREATS, _MITIGATIONS
 
+load_dotenv()
 
 class TestSeedData:
     """Valida estrutura dos dados antes de tocar no Neo4j."""

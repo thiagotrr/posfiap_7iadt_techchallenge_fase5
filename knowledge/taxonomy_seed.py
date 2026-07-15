@@ -25,6 +25,7 @@ from knowledge.graph_client import get_session
 
 import logging
 import os
+from dotenv import load_dotenv
 
 from neo4j import Driver
 
@@ -41,6 +42,8 @@ from knowledge.graph_schema import (
     STRIDE_MATRIX,
     REFERENCE_ARCHITECTURE_SERVICES,
 )
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 

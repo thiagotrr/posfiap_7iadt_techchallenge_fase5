@@ -5,15 +5,17 @@ Singleton de conexão Neo4j.
 Lê NEO4J_URI, NEO4J_USER e NEO4J_PASSWORD de variáveis de ambiente.
 O driver é encerrado automaticamente via atexit.
 """
-
 from __future__ import annotations
 
 import atexit
 import logging
 import os
+from dotenv import load_dotenv
 from typing import Optional
 
 from neo4j import GraphDatabase, Driver, Session
+
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,7 @@ _database: Optional[str]= None
 
 def get_driver() -> Driver:
     """Retorna o driver Neo4j singleton, criando-o na primeira chamada."""
-    global _driver
+    global _driver, _database
     if _driver is None:
         uri = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
         user = os.environ.get("NEO4J_USER", "neo4j")
@@ -33,7 +35,7 @@ def get_driver() -> Driver:
                 "NEO4J_PASSWORD environment variable is required but not set."
             )
         _driver = GraphDatabase.driver(uri, auth=(user, password))
-        logger.info("Neo4j driver initialized — uri=%s user=%s", uri, user)
+        logger.info("Neo4j driver initialized — uri=%s user=%s database=%s", uri, user, _database)
         atexit.register(_close_driver)
     return _driver
 
