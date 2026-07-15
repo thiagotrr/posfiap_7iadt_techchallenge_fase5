@@ -37,12 +37,12 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     logger.info("Starting KG seed via scripts/seed_kg.py")
-    driver = get_driver()
     try:
-        run_seed(driver)
+        run_seed()
         logger.info("Seed completed successfully.")
     except Exception as exc:
         logger.error("Seed failed: %s", exc)
         sys.exit(1)
     finally:
-        driver.close()
+        pass # Driver é fechado automaticamente pelo singleton com o uso de `with get_session() as session:`
+        
