@@ -1,0 +1,2043 @@
+{
+  "figure1backup": {
+    "file": "Figure_1.93fa4ba70e5cdbb38a36e99c003eda006e5f4821.png",
+    "width": 700,
+    "height": 527,
+    "boxes": [
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          18,
+          78,
+          301,
+          293
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          88,
+          109,
+          138,
+          152
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          157,
+          108,
+          199,
+          152
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          205,
+          175,
+          250,
+          216
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          39,
+          176,
+          84,
+          216
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          81,
+          136,
+          92,
+          146
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          199,
+          135,
+          211,
+          146
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          456,
+          125,
+          463,
+          136
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          508,
+          122,
+          519,
+          136
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          543,
+          175,
+          581,
+          218
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          465,
+          109,
+          507,
+          150
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          372,
+          79,
+          660,
+          293
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          63,
+          402,
+          72,
+          411
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          197,
+          405,
+          209,
+          413
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          157,
+          376,
+          200,
+          416
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          75,
+          374,
+          119,
+          417
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          41,
+          442,
+          87,
+          484
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          211,
+          438,
+          250,
+          481
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          16,
+          331,
+          299,
+          524
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          374,
+          335,
+          659,
+          516
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          464,
+          374,
+          509,
+          418
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "secrets_crypto",
+        "box": [
+          535,
+          442,
+          577,
+          480
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          453,
+          387,
+          470,
+          404
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          506,
+          402,
+          520,
+          417
+        ]
+      }
+    ]
+  },
+  "oracleebs": {
+    "file": "oracle-ebs-on-aws.png",
+    "width": 1387,
+    "height": 878,
+    "boxes": [
+      {
+        "cls": "component",
+        "category": "external_actor",
+        "box": [
+          4,
+          490,
+          53,
+          581
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "external_actor",
+        "box": [
+          960,
+          2,
+          1026,
+          39
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "edge_network",
+        "box": [
+          788,
+          57,
+          835,
+          109
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "security_service",
+        "box": [
+          645,
+          59,
+          693,
+          105
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          93,
+          122,
+          1377,
+          872
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          202,
+          175,
+          1214,
+          850
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          311,
+          183,
+          645,
+          309
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          315,
+          309,
+          650,
+          465
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          313,
+          504,
+          649,
+          674
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          320,
+          707,
+          645,
+          824
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          860,
+          183,
+          1194,
+          311
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          853,
+          316,
+          1192,
+          466
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          862,
+          500,
+          1189,
+          679
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          853,
+          699,
+          1196,
+          820
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "api_gateway",
+        "box": [
+          438,
+          214,
+          503,
+          259
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "api_gateway",
+        "box": [
+          980,
+          216,
+          1058,
+          259
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "api_gateway",
+        "box": [
+          728,
+          149,
+          780,
+          197
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          720,
+          358,
+          786,
+          416
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          715,
+          560,
+          779,
+          609
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "security_service",
+        "box": [
+          722,
+          716,
+          784,
+          760
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          394,
+          349,
+          455,
+          403
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          513,
+          353,
+          567,
+          404
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          400,
+          563,
+          452,
+          604
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          521,
+          559,
+          567,
+          613
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          424,
+          740,
+          477,
+          790
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          992,
+          745,
+          1061,
+          790
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          920,
+          557,
+          968,
+          617
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          1052,
+          565,
+          1111,
+          614
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          911,
+          362,
+          974,
+          416
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          1045,
+          363,
+          1107,
+          412
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "security_service",
+        "box": [
+          1254,
+          186,
+          1302,
+          234
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          1256,
+          300,
+          1304,
+          353
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          1262,
+          385,
+          1307,
+          440
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          1254,
+          514,
+          1305,
+          564
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          1256,
+          641,
+          1306,
+          688
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          1257,
+          744,
+          1306,
+          790
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          695,
+          73,
+          731,
+          100
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          858,
+          76,
+          882,
+          91
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          711,
+          154,
+          727,
+          183
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          847,
+          376,
+          877,
+          407
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          640,
+          369,
+          670,
+          400
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          633,
+          572,
+          678,
+          607
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          855,
+          577,
+          877,
+          602
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          387,
+          749,
+          408,
+          775
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          103,
+          516,
+          129,
+          533
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          955,
+          753,
+          986,
+          774
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          836,
+          132,
+          1210,
+          866
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          300,
+          132,
+          662,
+          863
+        ]
+      }
+    ]
+  },
+  "figura1": {
+    "file": "figura1_enunciado.png",
+    "width": 983,
+    "height": 573,
+    "boxes": [
+      {
+        "cls": "component",
+        "category": "external_actor",
+        "box": [
+          197,
+          38,
+          244,
+          75
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "security_service",
+        "box": [
+          355,
+          33,
+          407,
+          80
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "edge_network",
+        "box": [
+          425,
+          32,
+          476,
+          76
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "security_service",
+        "box": [
+          509,
+          33,
+          566,
+          80
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          250,
+          218,
+          295,
+          250
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          411,
+          212,
+          456,
+          251
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          583,
+          210,
+          624,
+          251
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          698,
+          133,
+          752,
+          180
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          703,
+          212,
+          749,
+          260
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          701,
+          303,
+          744,
+          348
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "logging_monitoring",
+        "box": [
+          699,
+          374,
+          748,
+          421
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "messaging_eventing",
+        "box": [
+          695,
+          461,
+          749,
+          511
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          568,
+          452,
+          635,
+          509
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          571,
+          334,
+          637,
+          393
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          399,
+          334,
+          467,
+          385
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          241,
+          333,
+          298,
+          388
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          215,
+          453,
+          269,
+          499
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          278,
+          450,
+          328,
+          498
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          364,
+          455,
+          426,
+          500
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          445,
+          451,
+          505,
+          502
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          175,
+          113,
+          775,
+          548
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          188,
+          145,
+          679,
+          542
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          197,
+          172,
+          347,
+          534
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          356,
+          169,
+          510,
+          537
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          525,
+          172,
+          668,
+          530
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          207,
+          188,
+          338,
+          266
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          204,
+          271,
+          335,
+          521
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          359,
+          190,
+          508,
+          267
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          356,
+          272,
+          504,
+          523
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          531,
+          190,
+          662,
+          263
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          534,
+          271,
+          664,
+          518
+        ]
+      }
+    ]
+  },
+  "eks": {
+    "file": "eks-microservices-modernization.png",
+    "boxes": [
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          115,
+          3,
+          1371,
+          775
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          146,
+          70,
+          898,
+          751
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          916,
+          74,
+          1357,
+          755
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          264,
+          145,
+          870,
+          566
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          159,
+          587,
+          851,
+          708
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          948,
+          504,
+          1321,
+          731
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          951,
+          174,
+          1329,
+          473
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          328,
+          193,
+          749,
+          534
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          390,
+          260,
+          549,
+          491
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          569,
+          257,
+          737,
+          487
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "external_actor",
+        "box": [
+          13,
+          34,
+          84,
+          100
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "external_actor",
+        "box": [
+          18,
+          610,
+          84,
+          678
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "api_gateway",
+        "box": [
+          1064,
+          226,
+          1139,
+          278
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          440,
+          282,
+          496,
+          351
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          424,
+          399,
+          505,
+          452
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          610,
+          395,
+          697,
+          450
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          627,
+          293,
+          684,
+          355
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          1082,
+          556,
+          1173,
+          644
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          685,
+          615,
+          748,
+          675
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "cicd_devops",
+        "box": [
+          528,
+          612,
+          588,
+          670
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "cicd_devops",
+        "box": [
+          359,
+          611,
+          419,
+          670
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "cicd_devops",
+        "box": [
+          202,
+          552,
+          263,
+          609
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "edge_network",
+        "box": [
+          19,
+          343,
+          81,
+          403
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          784,
+          343,
+          845,
+          401
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "load_balancer",
+        "box": [
+          170,
+          342,
+          241,
+          409
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          35,
+          323,
+          64,
+          341
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          73,
+          360,
+          99,
+          387
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          161,
+          363,
+          182,
+          390
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          233,
+          363,
+          251,
+          384
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          369,
+          366,
+          391,
+          390
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          533,
+          362,
+          561,
+          386
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          562,
+          364,
+          582,
+          385
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          741,
+          368,
+          763,
+          390
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          771,
+          365,
+          791,
+          389
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          840,
+          363,
+          858,
+          382
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          838,
+          387,
+          860,
+          411
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          970,
+          363,
+          992,
+          388
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          1008,
+          332,
+          1038,
+          350
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          1047,
+          235,
+          1070,
+          265
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          934,
+          622,
+          957,
+          646
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          702,
+          527,
+          728,
+          548
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          541,
+          529,
+          575,
+          550
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          505,
+          627,
+          525,
+          655
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          664,
+          630,
+          684,
+          655
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          333,
+          631,
+          355,
+          654
+        ]
+      }
+    ]
+  },
+  "moderndata": {
+    "file": "modern-data-analytics-on-aws.png",
+    "boxes": [
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          10,
+          85,
+          228,
+          1004
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          259,
+          38,
+          1645,
+          1023
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          268,
+          115,
+          561,
+          1000
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          627,
+          341,
+          819,
+          886
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          886,
+          335,
+          1074,
+          881
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1165,
+          45,
+          1633,
+          1014
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          281,
+          369,
+          543,
+          740
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          55,
+          365,
+          191,
+          743
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1186,
+          96,
+          1575,
+          192
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1182,
+          202,
+          1573,
+          304
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1183,
+          319,
+          1577,
+          422
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1191,
+          435,
+          1579,
+          539
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1191,
+          551,
+          1584,
+          648
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1187,
+          664,
+          1585,
+          766
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1187,
+          783,
+          1579,
+          885
+        ]
+      },
+      {
+        "cls": "boundary",
+        "category": null,
+        "box": [
+          1192,
+          899,
+          1581,
+          1002
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          85,
+          157,
+          152,
+          219
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          1355,
+          442,
+          1413,
+          497
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          381,
+          164,
+          433,
+          218
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          703,
+          432,
+          766,
+          488
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          1357,
+          911,
+          1419,
+          965
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "compute",
+        "box": [
+          1358,
+          555,
+          1417,
+          608
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          1270,
+          681,
+          1323,
+          734
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          1472,
+          688,
+          1531,
+          741
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          1263,
+          789,
+          1322,
+          842
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          1468,
+          789,
+          1526,
+          841
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          1357,
+          329,
+          1412,
+          383
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          1353,
+          217,
+          1410,
+          269
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "messaging_eventing",
+        "box": [
+          1354,
+          101,
+          1408,
+          156
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          950,
+          688,
+          1006,
+          739
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          955,
+          449,
+          1018,
+          503
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          699,
+          725,
+          756,
+          783
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          699,
+          567,
+          775,
+          633
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "messaging_eventing",
+        "box": [
+          382,
+          396,
+          441,
+          446
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "messaging_eventing",
+        "box": [
+          378,
+          504,
+          433,
+          555
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "analytics_ml",
+        "box": [
+          379,
+          633,
+          438,
+          690
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "database",
+        "box": [
+          622,
+          192,
+          688,
+          252
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          379,
+          281,
+          442,
+          334
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "messaging_eventing",
+        "box": [
+          379,
+          751,
+          436,
+          801
+        ]
+      },
+      {
+        "cls": "component",
+        "category": "storage",
+        "box": [
+          381,
+          857,
+          442,
+          913
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          353,
+          165,
+          382,
+          208
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          349,
+          291,
+          368,
+          319
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          256,
+          540,
+          293,
+          570
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          341,
+          771,
+          367,
+          794
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          327,
+          875,
+          363,
+          906
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          714,
+          877,
+          736,
+          902
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          1145,
+          896,
+          1173,
+          926
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          812,
+          598,
+          839,
+          622
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          878,
+          595,
+          904,
+          624
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          1067,
+          594,
+          1096,
+          629
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          1137,
+          597,
+          1166,
+          626
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          676,
+          428,
+          704,
+          458
+        ]
+      },
+      {
+        "cls": "arrowhead",
+        "category": null,
+        "box": [
+          677,
+          461,
+          699,
+          487
+        ]
+      }
+    ]
+  }
+}

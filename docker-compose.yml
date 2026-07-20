@@ -25,11 +25,62 @@ services:
       - .env
     environment:
       NEO4J_URI: bolt://neo4j:7687
+      VISION_DETECTOR_URL: http://vision-detector:8000
     volumes:
       - ./:/code
     depends_on:
       neo4j:
         condition: service_healthy
+      vision-detector:
+        condition: service_started
+
+  # Extração de diagrama (vision-detector, YOLOv8) -- serviço separado da
+  # `api` de propósito: mantém a imagem da API leve, sem torch/ultralytics.
+  # extraction/service.py fala com ele via HTTP (VISION_DETECTOR_URL acima).
+  # Sobe como servidor HTTP por padrão (api.py); os scripts de treino e
+  # avaliação continuam rodando via `docker compose run --rm vision-detector
+  # python train.py` (ou remap_labels.py/eval_*.py), que sobrescreve o
+  # comando default -- ver models/vision-detector/README.md.
+  vision-detector:
+    build:
+      context: ./models/vision-detector
+    volumes:
+      # Bind-mount da pasta inteira: datasets, pesos treinados (runs/) e
+      # saídas de predição são lidos/gravados direto no host, e os pesos
+      # baixados automaticamente do Hugging Face no startup (ver api.py)
+      # persistem entre reinicializações do container.
+      - ./models/vision-detector:/app
+      # predict.py builda um extraction.schemas.ArchitectureDiagram, o
+      # contrato de dados compartilhado (raiz do repo, não é específico
+      # deste modelo) -- montado separadamente porque o build context acima
+      # só cobre models/vision-detector.
+      - ./extraction:/app/extraction
+    working_dir: /app
+    ports:
+      - "${VISION_DETECTOR_PORT:-8001}:8000"
+    # PyTorch DataLoader workers passam tensores via /dev/shm; o default de
+    # 64MB do Docker causa "Bus error" (SIGBUS) sob carga real de treino.
+    shm_size: '2gb'
+    # --- GPU (RTX 5070 / Blackwell) ---
+    # A maioria da máquinas do time não tem GPU -- por padrão este bloco
+    # fica comentado e a inferência roda em CPU (~0,2s/imagem, sem
+    # diferença prática de UX; só o TREINO fica impraticável sem GPU, ver
+    # models/vision-detector/README.md#requisitos-de-hardware-e-tempo-estimado).
+    #
+    # Se sua máquina tiver uma RTX 5070 (ou outra GPU Blackwell/sm_120),
+    # descomente o bloco abaixo -- é a MESMA config usada no desenvolvimento
+    # deste modelo (requer NVIDIA Container Toolkit no host: `docker run
+    # --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu22.04 nvidia-smi` precisa
+    # funcionar). O Dockerfile já instala o build de torch com CUDA 12.8
+    # necessário para essa GPU -- ver comentário lá e
+    # models/vision-detector/README.md#gpu-nvidia-blackwell-ex-rtx-5070.
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
 
   streamlit:
     build:

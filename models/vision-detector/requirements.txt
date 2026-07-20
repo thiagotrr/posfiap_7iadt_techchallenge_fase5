@@ -1,0 +1,15 @@
+# torch/torchvision/torchaudio are intentionally NOT listed here: they're
+# installed separately in the Dockerfile, pinned to the CUDA 12.8 build
+# required by Blackwell GPUs (e.g. RTX 5070, sm_120). Letting ultralytics
+# pull its own torch via this file would silently replace that pinned build.
+ultralytics>=8.2.0
+pyyaml>=6.0
+pytesseract>=0.3.10
+pydantic>=2.0
+
+# Servidor HTTP do container (api.py) chamado por extraction/service.py
+# (modo HTTP, ver docstring do módulo) e download automático dos pesos.
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.6
+python-multipart>=0.0.12
+huggingface_hub>=0.25.0

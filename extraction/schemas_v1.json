@@ -1,0 +1,283 @@
+{
+  "$defs": {
+    "Component": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "aws_service": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Aws Service"
+        },
+        "element_type": {
+          "enum": [
+            "process",
+            "data_store",
+            "data_flow",
+            "external_entity"
+          ],
+          "title": "Element Type",
+          "type": "string"
+        },
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Category"
+        },
+        "trust_boundary": {
+          "title": "Trust Boundary",
+          "type": "string"
+        },
+        "instance_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instance Count"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "element_type",
+        "trust_boundary"
+      ],
+      "title": "Component",
+      "type": "object"
+    },
+    "DataFlow": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "destination": {
+          "title": "Destination",
+          "type": "string"
+        },
+        "protocol": {
+          "title": "Protocol",
+          "type": "string"
+        },
+        "crosses_boundary": {
+          "title": "Crosses Boundary",
+          "type": "boolean"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "destination",
+        "protocol",
+        "crosses_boundary"
+      ],
+      "title": "DataFlow",
+      "type": "object"
+    },
+    "DiagramMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "cloud_provider": {
+          "title": "Cloud Provider",
+          "type": "string"
+        },
+        "region": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Region"
+        },
+        "extraction_confidence": {
+          "title": "Extraction Confidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cloud_provider",
+        "extraction_confidence"
+      ],
+      "title": "DiagramMetadata",
+      "type": "object"
+    },
+    "TrustBoundary": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parent"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        },
+        "note": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Note"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type"
+      ],
+      "title": "TrustBoundary",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "diagram_metadata": {
+      "$ref": "#/$defs/DiagramMetadata"
+    },
+    "trust_boundaries": {
+      "items": {
+        "$ref": "#/$defs/TrustBoundary"
+      },
+      "title": "Trust Boundaries",
+      "type": "array"
+    },
+    "components": {
+      "items": {
+        "$ref": "#/$defs/Component"
+      },
+      "title": "Components",
+      "type": "array"
+    },
+    "data_flows": {
+      "items": {
+        "$ref": "#/$defs/DataFlow"
+      },
+      "title": "Data Flows",
+      "type": "array"
+    }
+  },
+  "required": [
+    "diagram_metadata",
+    "trust_boundaries",
+    "components",
+    "data_flows"
+  ],
+  "title": "ArchitectureDiagram",
+  "type": "object"
+}

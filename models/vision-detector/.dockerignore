@@ -1,0 +1,9 @@
+aws-icon-detector/
+dataset_archetypes/
+runs/
+data/
+*.jpg
+*.png
+*.pt
+__pycache__/
+*.pyc
