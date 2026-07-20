@@ -229,7 +229,7 @@ _MITIGATIONS = [
 # Seed function
 # ---------------------------------------------------------------------------
 
-def run_seed() -> None:
+def run_seed(driver: Driver | None = None) -> None:
     """
     Popula o Neo4j com a taxonomia STRIDE determinística.
     Idempotente: usa MERGE em todos os casos — pode ser executado múltiplas vezes.
@@ -237,12 +237,16 @@ def run_seed() -> None:
     Args:
         driver: Driver Neo4j (neo4j.Driver).
     """
-    logger.info("KG seed started")
+    logger.info(
+        "KG seed started — uri=%s",
+        os.environ.get("NEO4J_URI", "bolt://localhost:7687"),
+    )
 
     nodes_created = 0
     rels_created = 0
 
-    with get_session() as session:
+    session_context = driver.session() if driver is not None else get_session()
+    with session_context as session:
         # ------------------------------------------------------------------
         # 1. Constraints de unicidade
         # ------------------------------------------------------------------

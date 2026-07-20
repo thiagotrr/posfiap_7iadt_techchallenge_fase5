@@ -100,9 +100,8 @@ class TestSeedIdempotency:
     def driver(self):
         """Cria driver para testes de integração."""
         from knowledge.graph_client import get_driver
-        d = get_driver()
-        yield d
-        d.close()
+
+        yield get_driver()
 
     def _count_nodes(self, session, label: str) -> int:
         result = session.run(f"MATCH (n:{label}) RETURN count(n) AS cnt")

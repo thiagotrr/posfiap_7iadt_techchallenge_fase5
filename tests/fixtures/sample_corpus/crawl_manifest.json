@@ -1,0 +1,29 @@
+{
+  "schema_version": "1",
+  "executed_at": "2026-07-20T12:03:00Z",
+  "targets_processed": ["Sample AWS Security", "Sample Microsoft STRIDE", "Sample OWASP"],
+  "total_documents": 3,
+  "documents": [
+    {
+      "url": "https://example.com/aws/s3-authentication",
+      "title": "Amazon S3 authentication and encryption",
+      "provider": "aws",
+      "content_hash": "sample-aws-s3-auth",
+      "source_name": "Sample AWS Security"
+    },
+    {
+      "url": "https://example.com/microsoft/stride-overview",
+      "title": "Microsoft STRIDE threat categories",
+      "provider": "microsoft",
+      "content_hash": "sample-microsoft-stride",
+      "source_name": "Sample Microsoft STRIDE"
+    },
+    {
+      "url": "https://example.com/owasp/threat-modeling",
+      "title": "OWASP threat modeling cheat sheet",
+      "provider": "owasp",
+      "content_hash": "sample-owasp-threat-modeling",
+      "source_name": "Sample OWASP"
+    }
+  ]
+}

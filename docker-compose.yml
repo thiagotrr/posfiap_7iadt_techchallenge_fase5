@@ -23,6 +23,8 @@ services:
       - "${API_PORT:-8000}:8000"
     env_file:
       - .env
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
     volumes:
       - ./:/code
     depends_on:
