@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(tags=["knowledge"])
 
 
-@router.get("/knowledge/health")
+@router.get("/health")
 def knowledge_health() -> JSONResponse:
     """
     Health-check do Knowledge Graph STRIDE.
@@ -65,12 +65,11 @@ def knowledge_health() -> JSONResponse:
             },
         )
     except Exception as exc:
-        logger.error("KG health check failed — %s", exc)
+        logger.error("KG health check failed — error_type=%s", type(exc).__name__)
         return JSONResponse(
             status_code=503,
             content={
                 "status": "unavailable",
                 "error": "Neo4j is not accessible. Check NEO4J_URI and credentials.",
-                "detail": str(exc),
             },
         )

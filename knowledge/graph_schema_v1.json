@@ -72,7 +72,11 @@
         "url": "str",
         "title": "str",
         "crawled_at": "str (ISO-8601)",
-        "stride_tags": "list[str]"
+        "stride_tags": "list[str]",
+        "content_hash": "str (SHA-256)",
+        "source_name": "str",
+        "provider": "str",
+        "text_content": "str"
       }
     }
   },
@@ -81,8 +85,8 @@
     {"type": "INCLUI_AMEACA",             "from": "STRIDECategory", "to": "Threat",         "properties": {}},
     {"type": "MITIGADA_POR",              "from": "Threat",         "to": "Mitigation",     "properties": {}},
     {"type": "INSTANCIA_DE",              "from": "CloudService",   "to": "ElementType",    "properties": {}},
-    {"type": "POSSUI_AMEACA_ESPECIFICA",  "from": "CloudService",   "to": "Threat",         "properties": {}},
-    {"type": "POSSUI_MITIGACAO_ESPECIFICA","from": "CloudService",  "to": "Mitigation",     "properties": {}},
+    {"type": "HAS_SPECIFIC_THREAT",        "from": "CloudService",   "to": "Threat",         "properties": {}},
+    {"type": "HAS_SPECIFIC_MITIGATION",    "from": "CloudService",   "to": "Mitigation",     "properties": {}},
     {"type": "REFERENCIADA_EM",           "from": "Mitigation",     "to": "Source",         "properties": {}},
     {"type": "COVERS_SERVICE",            "from": "Source",         "to": "CloudService",   "properties": {}},
     {"type": "COVERS_CATEGORY",           "from": "Source",         "to": "STRIDECategory", "properties": {}}
@@ -132,7 +136,7 @@
     "get_stride_threats": {
       "signature": "get_stride_threats(element_type: str, cloud_service: Optional[str] = None, driver: Optional[Driver] = None) -> KGQueryResult",
       "module": "knowledge.query",
-      "status": "stub (Épico 1) — implementação completa no Épico 4"
+      "status": "disponível desde o Épico 4"
     },
     "get_fixture_for": {
       "signature": "get_fixture_for(element_type: str) -> KGQueryResult",

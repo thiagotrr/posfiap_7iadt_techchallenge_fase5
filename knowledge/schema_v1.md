@@ -29,8 +29,8 @@ e os serviços de nuvem do diagrama de referência como nós `CloudService`.
 | `INCLUI_AMEACA` | `STRIDECategory` → `Threat` | — |
 | `MITIGADA_POR` | `Threat` → `Mitigation` | — |
 | `INSTANCIA_DE` | `CloudService` → `ElementType` | — |
-| `POSSUI_AMEACA_ESPECIFICA` | `CloudService` → `Threat` | — |
-| `POSSUI_MITIGACAO_ESPECIFICA` | `CloudService` → `Mitigation` | — |
+| `HAS_SPECIFIC_THREAT` | `CloudService` → `Threat` | — |
+| `HAS_SPECIFIC_MITIGATION` | `CloudService` → `Mitigation` | — |
 | `REFERENCIADA_EM` | `Mitigation` → `Source` | — |
 | `COVERS_SERVICE` | `Source` → `CloudService` | — |
 | `COVERS_CATEGORY` | `Source` → `STRIDECategory` | — |
@@ -97,8 +97,9 @@ MATCH (cs:CloudService {name: $cloud_service})
       -[:SUSCETIVEL_A]->(sc:STRIDECategory)
       -[:INCLUI_AMEACA]->(t:Threat)
       -[:MITIGADA_POR]->(m:Mitigation)
-OPTIONAL MATCH (cs)-[:POSSUI_AMEACA_ESPECIFICA]->(specific_t:Threat)
+OPTIONAL MATCH (cs)-[:HAS_SPECIFIC_THREAT]->(specific_t:Threat)
 OPTIONAL MATCH (specific_t)-[:MITIGADA_POR]->(specific_m:Mitigation)
+OPTIONAL MATCH (cs)-[:HAS_SPECIFIC_MITIGATION]->(specific_m)
 RETURN sc.letter, sc.name,
        collect(DISTINCT t)          AS taxonomy_threats,
        collect(DISTINCT m)          AS taxonomy_mitigations,
@@ -163,10 +164,11 @@ python -m knowledge.taxonomy_seed
 Execução esperada:
 ```
 2024-01-01 00:00:00 [INFO] knowledge.taxonomy_seed — KG seed started — uri=bolt://localhost:7687
-2024-01-01 00:00:01 [INFO] knowledge.taxonomy_seed — KG seed completed — nodes_created=30 relationships_created=48
+2024-01-01 00:00:01 [INFO] knowledge.taxonomy_seed — KG seed completed — nodes_created=46 relationships_created=51
 ```
 
-O seed é **idempotente** — executar novamente não duplica nós (usa `MERGE`).
+O seed é **idempotente** — executar novamente não duplica nós (usa `MERGE`) e,
+em uma reexecução sem mudanças, registra `nodes_created=0 relationships_created=0`.
 
 ---
 
