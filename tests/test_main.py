@@ -44,11 +44,10 @@ def test_extraction_stub_returns_503_not_yet_integrated():
     assert "not yet integrated" in response.json()["detail"]
 
 
-def test_knowledge_stub_returns_503_not_yet_integrated():
-    response = client.get("/api/v1/knowledge/anything")
+def test_knowledge_unknown_route_returns_404():
+    response = client.get("/api/v1/knowledge/nao-existe")
 
-    assert response.status_code == 503
-    assert "not yet integrated" in response.json()["detail"]
+    assert response.status_code == 404
 
 
 def test_orchestration_stub_returns_503_not_yet_integrated():
