@@ -1,0 +1,11 @@
+{
+  "url": "https://example.com/aws/s3-authentication",
+  "title": "Amazon S3 authentication and encryption",
+  "text_content": "Protect Amazon S3 buckets with strong authentication, identity controls, and encryption for sensitive data at rest and in transit.",
+  "source_name": "Sample AWS Security",
+  "provider": "aws",
+  "stride_hint": ["S", "I"],
+  "crawled_at": "2026-07-20T12:00:00Z",
+  "content_hash": "sample-aws-s3-auth",
+  "schema_version": "1"
+}

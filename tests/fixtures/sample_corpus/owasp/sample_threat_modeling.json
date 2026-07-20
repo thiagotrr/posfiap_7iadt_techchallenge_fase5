@@ -1,0 +1,11 @@
+{
+  "url": "https://example.com/owasp/threat-modeling",
+  "title": "OWASP threat modeling cheat sheet",
+  "text_content": "Threat modeling helps identify spoofing, tampering, repudiation, information disclosure, denial of service and elevation of privilege risks in application architecture.",
+  "source_name": "Sample OWASP",
+  "provider": "owasp",
+  "stride_hint": ["S", "T", "R", "I", "D", "E"],
+  "crawled_at": "2026-07-20T12:02:00Z",
+  "content_hash": "sample-owasp-threat-modeling",
+  "schema_version": "1"
+}

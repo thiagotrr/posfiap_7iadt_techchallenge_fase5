@@ -8,8 +8,10 @@ Os valores de CLOUD_SERVICES são os nomes canônicos usados como CloudService.n
 no KG e devem coincidir exatamente com os valores do campo `cloud_service` do
 schema Pydantic de Dev 1 (ArchitectureDiagram.Component.cloud_service).
 
-TO DO: complementar a lista de serviços com a lista em cloud_services.py que está na raiz do projeto.
+Aliases completos importados de cloud_services.py na raiz do projeto.
 """
+
+from cloud_services import cloud_service_aliases
 
 # ---------------------------------------------------------------------------
 # Labels de nós Neo4j
@@ -30,8 +32,6 @@ REL_SUSCETIVEL_A = "SUSCETIVEL_A"          # (:ElementType)-[:SUSCETIVEL_A {seve
 REL_INCLUI_AMEACA = "INCLUI_AMEACA"        # (:STRIDECategory)-[:INCLUI_AMEACA]->(:Threat)
 REL_MITIGADA_POR = "MITIGADA_POR"          # (:Threat)-[:MITIGADA_POR]->(:Mitigation)
 REL_INSTANCIA_DE = "INSTANCIA_DE"          # (:CloudService)-[:INSTANCIA_DE]->(:ElementType)
-REL_POSSUI_AMEACA_ESPECIFICA = "POSSUI_AMEACA_ESPECIFICA"      # (:CloudService)-[...]->(:Threat)
-REL_POSSUI_MITIGACAO_ESPECIFICA = "POSSUI_MITIGACAO_ESPECIFICA"  # (:CloudService)-[...]->(:Mitigation)
 REL_REFERENCIADA_EM = "REFERENCIADA_EM"    # (:Mitigation)-[:REFERENCIADA_EM]->(:Source)
 
 # Relacionamentos usados pelo pipeline de ingestão (Épicos 2–3)
@@ -39,6 +39,10 @@ REL_COVERS_SERVICE = "COVERS_SERVICE"      # (:Source)-[:COVERS_SERVICE]->(:Clou
 REL_COVERS_CATEGORY = "COVERS_CATEGORY"   # (:Source)-[:COVERS_CATEGORY]->(:STRIDECategory)
 REL_HAS_SPECIFIC_THREAT = "HAS_SPECIFIC_THREAT"
 REL_HAS_SPECIFIC_MITIGATION = "HAS_SPECIFIC_MITIGATION"
+
+# Aliases legados do contrato inicial; mantidos para imports existentes.
+REL_POSSUI_AMEACA_ESPECIFICA = REL_HAS_SPECIFIC_THREAT
+REL_POSSUI_MITIGACAO_ESPECIFICA = REL_HAS_SPECIFIC_MITIGATION
 
 # ---------------------------------------------------------------------------
 # Valores canônicos de ElementType
@@ -99,70 +103,7 @@ STRIDE_MATRIX: dict[str, list[str]] = {
 # o LLM de extração (Dev 1) produz. Nomes sourced de cloud_services.py.
 # ---------------------------------------------------------------------------
 
-CLOUD_SERVICES: dict[str, str] = {
-    # Route 53
-    "Route53": "Route 53",
-    "Route 53": "Route 53",
-    "Amazon Route 53": "Route 53",
-
-    # Elastic Load Balancing
-    "ELB": "Elastic Load Balancing",
-    "ALB": "Elastic Load Balancing",
-    "NLB": "Elastic Load Balancing",
-    "CLB": "Elastic Load Balancing",
-    "Elastic Load Balancer": "Elastic Load Balancing",
-    "Elastic Load Balancing": "Elastic Load Balancing",
-
-    # EC2
-    "EC2": "EC2",
-    "Amazon EC2": "EC2",
-
-    # ElastiCache
-    "ElastiCache": "ElastiCache",
-    "Elasticache": "ElastiCache",
-    "Amazon ElastiCache": "ElastiCache",
-
-    # RDS
-    "RDS": "RDS",
-    "Amazon RDS": "RDS",
-    "Relational Database Service": "RDS",
-
-    # S3
-    "S3": "S3",
-    "Amazon S3": "S3",
-    "Simple Storage Service": "S3",
-
-    # CloudFront
-    "CloudFront": "CloudFront",
-    "Amazon CloudFront": "CloudFront",
-
-    # CloudWatch
-    "CloudWatch": "CloudWatch",
-    "Amazon CloudWatch": "CloudWatch",
-
-    # SNS
-    "SNS": "SNS",
-    "Amazon SNS": "SNS",
-    "Simple Notification Service": "SNS",
-
-    # DynamoDB
-    "DynamoDB": "DynamoDB",
-    "Dynamo": "DynamoDB",
-    "Amazon DynamoDB": "DynamoDB",
-
-    # SES
-    "SES": "SES",
-    "Amazon SES": "SES",
-    "Simple Email Service": "SES",
-
-    # Lambda (suporte futuro)
-    "Lambda": "Lambda",
-    "AWS Lambda": "Lambda",
-
-    # API Gateway (suporte futuro)
-    "API Gateway": "API Gateway",
-    "Amazon API Gateway": "API Gateway",
-}
+CLOUD_SERVICES: dict[str, str] = cloud_service_aliases
 
 # Conjunto de nomes canônicos únicos presentes no KG (usado para validação)
 CANONICAL_CLOUD_SERVICE_NAMES: set[str] = set(CLOUD_SERVICES.values())

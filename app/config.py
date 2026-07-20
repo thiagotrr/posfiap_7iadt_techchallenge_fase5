@@ -10,9 +10,14 @@ class Settings(BaseSettings):
 
     ANTHROPIC_API_KEY: str = ""
     OPENAI_API_KEY: str = ""
+    GOOGLE_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
 
     EXTRACTION_LLM_PROVIDER: str = "anthropic"
     ANALYSIS_LLM_PROVIDER: str = "anthropic"
+    KG_CLASSIFIER_LLM_PROVIDER: str = "openai"
+    KG_CLASSIFIER_OPENAI_MODEL: str = "gpt-4o-mini"
+    KG_CLASSIFIER_GEMINI_MODEL: str = "gemini-2.5-flash"
 
     ALLOWED_ORIGINS: str = "http://localhost:8501"
     LOG_LEVEL: str = "INFO"

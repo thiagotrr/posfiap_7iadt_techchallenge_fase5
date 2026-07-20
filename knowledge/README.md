@@ -5,6 +5,7 @@
 Módulo Dev 2. Gerencia o Knowledge Graph Neo4j com:
 - Taxonomia STRIDE determinística (4 `ElementType`, 6 `STRIDECategory`, 12 `Threat`, 12 `Mitigation`)
 - Serviços de nuvem do diagrama de referência (11 nós `CloudService` AWS + 1 External Entity genérico)
+- Crawler e pipeline condicional de classificação/enriquecimento
 - Interface de query `get_stride_threats()` consumida pelo LangGraph (Dev 3)
 
 ---
@@ -44,6 +45,28 @@ print(result.total_threats)          # 12
 print(result.stride_results[0].letter)  # "S"
 ```
 
+### 4. Executar a ingestão
+
+O classificador usa LangChain e aceita OpenAI ou Gemini. Configure apenas um
+provedor e sua chave no ambiente:
+
+```bash
+# OpenAI
+export KG_CLASSIFIER_LLM_PROVIDER=openai
+export OPENAI_API_KEY=...
+
+# ou Gemini
+export KG_CLASSIFIER_LLM_PROVIDER=gemini
+export GOOGLE_API_KEY=...
+
+python scripts/run_ingestion.py
+python scripts/run_ingestion.py --force
+```
+
+`KG_CLASSIFIER_LLM_PROVIDER` tem precedência sobre
+`EXTRACTION_LLM_PROVIDER`. Se a chamada ao LLM falhar, o pipeline usa
+heurísticas locais e, por fim, os `stride_hint` do crawler.
+
 ---
 
 ## API Pública
@@ -66,7 +89,11 @@ result.query_source      # "taxonomy" | "enriched" | "both"
 result.stride_results    # list[STRIDEResult]
 ```
 
-> **Épico 1:** função é stub (levanta `NotImplementedError`). Use `knowledge.fixtures.get_fixture_for()` para mockar.
+A função valida o `element_type`, normaliza aliases de serviços (por exemplo,
+`Amazon S3` → `S3`) e combina a taxonomia com os relacionamentos de
+enriquecimento criados pelo pipeline. Um resultado só é marcado como
+enriquecido quando os vínculos de `Source` para o serviço e a categoria também
+existem; o contrato Pydantic publicado no Épico 1 permanece inalterado.
 
 ### Modelos Pydantic (`knowledge/models.py`)
 
@@ -83,10 +110,11 @@ result.stride_results    # list[STRIDEResult]
 
 ```python
 from unittest.mock import patch
+import knowledge
 from knowledge.fixtures import get_fixture_for
 
-with patch("knowledge.query.get_stride_threats", side_effect=get_fixture_for):
-    result = get_stride_threats("process")
+with patch.object(knowledge, "get_stride_threats", side_effect=get_fixture_for):
+    result = knowledge.get_stride_threats("process")
 ```
 
 ---
@@ -99,25 +127,24 @@ knowledge/
 ├── graph_schema.py      # Constantes de labels, relationships, CLOUD_SERVICES
 ├── graph_client.py      # Singleton Neo4j driver
 ├── models.py            # ThreatResult, MitigationResult, STRIDEResult, KGQueryResult
-├── query.py             # get_stride_threats() (stub → implementação Épico 4)
+├── query.py             # get_stride_threats() — taxonomia + enriquecimento
 ├── taxonomy_seed.py     # run_seed() — popula taxonomia STRIDE
 ├── exceptions.py        # ElementTypeNotFoundError, IngestionError, CrawlerError
 ├── fixtures.py          # Fixtures para mock (Dev 3 / Dev 4)
 ├── router.py            # APIRouter FastAPI GET /knowledge/health
 ├── schema_v1.md         # Schema documentado + Cypher queries
 ├── graph_schema_v1.json # Snapshot do schema (contrato JSON para outros devs)
-├── ingestion/           # Pipeline de ingestão (Épico 3)
-└── crawler/             # Web crawler (Épico 2)
+├── ingestion/           # Classificador, loader e pipeline condicional
+└── crawler/             # Web crawler e persistência do corpus
 ```
 
 ---
 
 ## Limitações Conhecidas (MVP)
 
-- `get_stride_threats()` é stub no Épico 1; implementação completa no Épico 4.
-- Pipeline de ingestão (Épico 3) e crawler (Épico 2) ainda não implementados.
 - `MemorySaver` do driver Neo4j é per-processo — múltiplos workers FastAPI criam drivers separados.
 - Taxonomia STRIDE é baseada no método Microsoft; ameaças por serviço específico dependem do crawler (Épico 2+3).
+- Sem `crawl_manifest.json`, a ingestão executa somente o seed e termina com sucesso.
 
 ---
 
@@ -128,3 +155,28 @@ knowledge/
 | `NEO4J_URI` | `bolt://localhost:7687` | URI do Neo4j |
 | `NEO4J_USER` | `neo4j` | Usuário Neo4j |
 | `NEO4J_PASSWORD` | — | **Obrigatória** |
+| `NEO4J_DATABASE` | `neo4j` | Database usada pelo Singleton |
+| `KG_CLASSIFIER_LLM_PROVIDER` | `openai` | `openai` ou `gemini` |
+| `OPENAI_API_KEY` | — | Chave usada pelo provider OpenAI |
+| `GOOGLE_API_KEY` / `GEMINI_API_KEY` | — | Chave usada pelo provider Gemini |
+| `KG_CLASSIFIER_OPENAI_MODEL` | `gpt-4o-mini` | Modelo OpenAI |
+| `KG_CLASSIFIER_GEMINI_MODEL` | `gemini-2.5-flash` | Modelo Gemini |
+
+---
+
+## Testes
+
+```bash
+# Testes unitários, sem infraestrutura externa
+pytest -m "not integration"
+
+# Testes de integração (execute a partir do host)
+docker compose up -d neo4j
+export NEO4J_URI=bolt://localhost:7687
+export NEO4J_USER=neo4j
+export NEO4J_PASSWORD=password
+pytest -m integration
+```
+
+O router é testado em uma aplicação FastAPI isolada e permanece sem registro
+no app principal; sua montagem em `/api/v1` é responsabilidade do Dev 4.

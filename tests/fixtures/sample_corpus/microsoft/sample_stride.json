@@ -1,0 +1,11 @@
+{
+  "url": "https://example.com/microsoft/stride-overview",
+  "title": "Microsoft STRIDE threat categories",
+  "text_content": "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service and Elevation of Privilege are the core STRIDE categories used in threat modeling.",
+  "source_name": "Sample Microsoft STRIDE",
+  "provider": "microsoft",
+  "stride_hint": ["S", "T", "R", "I", "D", "E"],
+  "crawled_at": "2026-07-20T12:01:00Z",
+  "content_hash": "sample-microsoft-stride",
+  "schema_version": "1"
+}
