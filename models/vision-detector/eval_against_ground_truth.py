@@ -21,13 +21,7 @@ import predict as P
 
 WEIGHTS = "runs/detect/stride/weights/best.pt"
 GT_PATH = "real_eval_holdout/ground_truth/annotations.json"
-IMAGE_ROOT = {
-    "figure1backup": "real_detection_data",
-    "oracleebs": "real_eval_holdout",
-    "figura1": "real_eval_holdout",
-    "eks": "real_eval_holdout",
-    "moderndata": "real_eval_holdout",
-}
+IMAGE_ROOT = "real_eval_holdout"
 BOUNDARY_CLASS = "boundary"
 ARROWHEAD_CLASS = "arrowhead"
 # ground truth so conhece "boundary" generico (nao os sub-tipos vpc/region/
@@ -97,7 +91,7 @@ def main():
     category_correct, category_total = 0, 0
 
     for key, entry in gt_all.items():
-        img_path = str(Path(IMAGE_ROOT[key]) / entry["file"])
+        img_path = str(Path(IMAGE_ROOT) / entry["file"])
         result = model.predict(source=img_path, conf=args.conf, imgsz=args.imgsz, verbose=False)[0]
         names = result.names
 

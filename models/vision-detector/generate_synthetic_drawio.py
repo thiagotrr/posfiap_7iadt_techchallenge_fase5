@@ -173,7 +173,7 @@ PLAIN_GROUPS = {
 # estrutura FIXA por template, onde cada boundary contem EXATAMENTE os filhos
 # definidos nela e a caixa e dimensionada para encaixar (padding fixo, sem
 # folga aleatoria) -- e o padrao real observado em
-# models/vision-detector/real_detection_data/aws-example.png: a VPC contem
+# models/vision-detector/real_detection_data/exemplo_05.png: a VPC contem
 # TODOS os componentes exceto Users/Internet Gateway; a Private Subnet contem
 # exatamente o Auto Scaling Group + a instancia de banco primaria, nao um
 # subconjunto aleatorio de icones proximos no espaco.
@@ -233,7 +233,7 @@ def icon(rng: random.Random, archetype: str) -> Icon:
 # tamanho do icone (~48-76px, exatamente o que reapareceu quando o padding
 # aqui tinha piso de so 24-56px fixo). Contencao (quais icones ficam dentro
 # de qual boundary) continua 100% deterministica -- so a MARGEM ao redor do
-# conteudo varia, o que alias tambem e mais realista (aws-example.png tem
+# conteudo varia, o que alias tambem e mais realista (exemplo_05.png tem
 # folga visivel, nao e "colado" no icone).
 # Faixas alargadas apos o 1o retreino ainda ter saido com boundary F1 baixo
 # (0.38, quase igual ao 0.39 de antes desta rodada de padding aleatorio) --
@@ -319,7 +319,7 @@ def _place(node, x, y, icons_out, groups_out):
 # nunca um subconjunto aleatorio.
 
 def _template_vpc_multiaz(rng: random.Random, n_az: int):
-    """Espelha aws-example.png: AWS Cloud > (Internet Gateway direto +
+    """Espelha exemplo_05.png: AWS Cloud > (Internet Gateway direto +
     VPC) -- VPC contem TODOS os componentes exceto Users/Internet Gateway
     (ELB entre as AZs + as proprias AZs); cada AZ > Public Subnet (borda) +
     Private Subnet (o "Auto Scaling group" com a instancia de compute, e o
@@ -342,7 +342,7 @@ def _template_vpc_multiaz(rng: random.Random, n_az: int):
 
 
 def _template_region_fullstack(rng: random.Random, n_az: int):
-    """Espelha figura1_enunciado.png/1564576274274.png: Region > VPC > N
+    """Espelha figura1_enunciado.png/exemplo_02.png: Region > VPC > N
     Availability Zones (Public Subnet = load balancer de borda; Private
     Subnet = compute+banco+storage), mais uma coluna lateral de icones soltos
     de log/seguranca direto no AWS Cloud (fora da VPC) e uma cadeia de
@@ -373,7 +373,7 @@ def _template_region_fullstack(rng: random.Random, n_az: int):
 
 
 def _template_logical_layers(rng: random.Random):
-    """Espelha serverless_web_application/test_diagram2: camadas logicas
+    """Espelha exemplo_09/exemplo_11: camadas logicas
     (ex.: API/Compute/Data) sem fronteira de rede, so agrupamento por
     proposito -- caixa generica "Component" em vez de VPC/Subnet/AZ."""
     archetype_pool = ["api_gateway", "compute", "database", "storage",
@@ -445,18 +445,18 @@ def _border_point(cx: float, cy: float, size: float, dx: float, dy: float):
 
 
 # Diagramas de referencia reais (ver models/vision-detector/real_detection_data/
-# image4.png, serverless_web_application-1-1024x850.png, hard_example.png,
-# darede_oct21_Picture1.png) NAO usam so borda tracejada pra fronteira: tambem
+# exemplo_08.png, exemplo_09.png, exemplo_07.png,
+# exemplo_06.png) NAO usam so borda tracejada pra fronteira: tambem
 # aparecem (a) borda SOLIDA sem preenchimento (AWS Cloud/conta/VPC em
-# hard_example.png e darede) e (b) bloco de cor CHAPADA sem borda visivel
+# exemplo_07.png e exemplo_06) e (b) bloco de cor CHAPADA sem borda visivel
 # nenhuma (camadas logicas tipo "API Layer"/"Data Layer"/"Web Subnet" em
-# serverless_web_application.png e image4.png). Sem essa variacao o detector
+# exemplo_09.png e exemplo_08.png). Sem essa variacao o detector
 # via só tracejado no treino sintetico e podia aprender "boundary = borda
 # tracejada" em vez do retangulo em si -- 3 estilos, sorteados por instancia
 # (diagramas reais tambem misturam estilo dentro do mesmo diagrama).
 #
-# "AWS Cloud" e EXCECAO: em toda referencia real que revisamos (image4.png,
-# hard_example.png, darede_oct21_Picture1.png) o retangulo mais externo e
+# "AWS Cloud" e EXCECAO: em toda referencia real que revisamos (exemplo_08.png,
+# exemplo_07.png, exemplo_06.png) o retangulo mais externo e
 # SEMPRE borda solida cinza-escura/preta sem preenchimento, nunca tracejado
 # nem colorido -- por isso e forcado, nao sorteado (ver _pick_border_style).
 #
@@ -464,7 +464,7 @@ def _border_point(cx: float, cy: float, size: float, dx: float, dy: float):
 # icone de canto nas referencias reais e SEMPRE aparecem so com contorno
 # (solido ou tracejado, nunca bloco de cor) -- "filled" so ocorre nos
 # PLAIN_GROUPS (Subnet/AZ/Monitoring/Component), que sao exatamente as caixas
-# sem icone de canto (image4.png/serverless_web_application.png).
+# sem icone de canto (exemplo_08.png/exemplo_09.png).
 ICON_GROUP_BORDER_STYLES = [("dashed", 1), ("solid", 1)]
 PLAIN_GROUP_BORDER_STYLES = [("dashed", 5), ("solid", 3), ("filled", 3)]
 
@@ -479,8 +479,8 @@ def _pick_border_style(rng: random.Random, label: str) -> str:
 
 
 # Cor de preenchimento do estilo "filled", calibrada a partir dos pixels
-# REAIS de fundo de Subnet/camada logica em image4.png e
-# serverless_web_application-1-1024x850.png (amostrado via PIL): a cor real e
+# REAIS de fundo de Subnet/camada logica em exemplo_08.png e
+# exemplo_09.png (amostrado via PIL): a cor real e
 # um tom quase-branco (~#E6F2F8 azul, ~#E9F3E6 verde -- so uns 10-25 de
 # diferenca por canal contra o branco da pagina). Bom o bastante pro olho
 # humano, mas contraste baixo demais pro detector aprender o retangulo sem
@@ -498,7 +498,7 @@ def _group_style(label: str, border: str) -> str:
     dashed = 1 if border == "dashed" else 0
     accent = PLAIN_GROUPS[label] if label not in ICON_GROUPS else ICON_GROUPS[label][1]
     # "filled" TAMBEM tem borda solida visivel, so com preenchimento por cima
-    # -- conferido pixel a pixel em image4.png (coluna x=250, y~525-527): a
+    # -- conferido pixel a pixel em exemplo_08.png (coluna x=250, y~525-527): a
     # caixa "Web Subnet" tem uma linha solida azul saturada (#147EBA-ish) na
     # borda, NAO strokeColor=none como a 1a versao assumia. Sem essa linha o
     # detector so tem uma tinta muito sutil pra achar a borda do retangulo
@@ -539,7 +539,7 @@ def build_diagram(rng: random.Random, diagram_id: str, n_icons: int):
     # EXATAMENTE os filhos definidos no template, caixa dimensionada por
     # padding fixo (sem folga aleatoria), reproduzindo o padrao "VPC contem
     # tudo exceto Users/Internet Gateway; Private Subnet contem exatamente o
-    # Auto Scaling Group + o banco primario" observado em aws-example.png.
+    # Auto Scaling Group + o banco primario" observado em exemplo_05.png.
     names = [t for t, _ in TEMPLATES]
     weights = [w for _, w in TEMPLATES]
     template = rng.choices(names, weights=weights, k=1)[0]
