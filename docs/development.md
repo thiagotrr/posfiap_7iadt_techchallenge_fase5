@@ -24,10 +24,31 @@ o formato completo e `GET /api/v1/extraction/health` para checar o status.
 Por padrão (`docker compose up`), a extração roda no serviço `vision-detector`
 (container separado, mantém a imagem da `api` leve) e a `api` fala com ele via
 HTTP usando a env `VISION_DETECTOR_URL` (já configurada no `docker-compose.yml`).
-No primeiro `docker compose up`, o container `vision-detector` baixa
-automaticamente os pesos treinados do Hugging Face (precisa de internet); se o
-download falhar (ex.: ambiente offline), ele loga o comando pra baixar
-manualmente — ver [`models/vision-detector/README.md`](../models/vision-detector/README.md#modelo-e-dataset-no-hugging-face).
+
+### Pesos do modelo: usar o pré-treinado ou treinar localmente
+
+Duas opções, escolhidas automaticamente pelo que já existe em
+`models/vision-detector/runs/detect/stride/weights/best.pt`:
+
+1. **Usar o modelo pré-treinado (padrão, recomendado)** — não precisa do
+   dataset. No primeiro `docker compose up`, o container `vision-detector`
+   baixa os pesos automaticamente do Hugging Face Hub
+   ([luisasousa/aws-architecture-vision-detector](https://huggingface.co/luisasousa/aws-architecture-vision-detector));
+   se a rede falhar (ambiente offline), ele loga o comando de download manual
+   em vez de derrubar o container. Para desligar até a *tentativa* de
+   download (ex.: ambiente sempre offline), defina
+   `VISION_DETECTOR_AUTO_DOWNLOAD_WEIGHTS=false` no `.env`.
+2. **Treinar seu próprio modelo localmente** — precisa do dataset de treino
+   (baixe do Roboflow ou do repo de dataset no Hugging Face
+   [luisasousa/aws-architecture-diagrams](https://huggingface.co/datasets/luisasousa/aws-architecture-diagrams),
+   ver [`models/vision-detector/README.md`](../models/vision-detector/README.md#modelo-e-dataset-no-hugging-face)).
+   Depois: `docker compose run --rm vision-detector python train.py`. Pesos
+   treinados localmente sempre têm prioridade — o download automático só
+   roda quando `best.pt` está ausente, então treinar não é sobrescrito por
+   ele.
+
+`GET /api/v1/extraction/health` (ou `GET /health` direto no `vision-detector`,
+porta `8001`) reporta se os pesos estão presentes.
 
 ### GPU (RTX 5070 / Blackwell)
 

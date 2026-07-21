@@ -15,6 +15,7 @@ etc., que sobrescreve esse comando default.
 from __future__ import annotations
 
 import logging
+import os
 import shutil
 import tempfile
 from contextlib import asynccontextmanager
@@ -36,15 +37,37 @@ _MANUAL_DOWNLOAD_HINT = (
     f"hf download {_HF_REPO_ID} {_HF_FILENAME} --local-dir {_WEIGHTS_PATH.parent}"
 )
 
+# Duas formas de ter pesos: usar os pré-treinados do Hugging Face (padrão,
+# baixados aqui) ou treinar localmente (`docker compose run --rm
+# vision-detector python train.py`, precisa do dataset -- ver README).
+# Quem treinou localmente já tem best.pt em disco, então _ensure_weights()
+# nunca sobrescreve: só baixa quando o arquivo está ausente. Essa env var
+# existe pra quem quer desligar até a TENTATIVA de download (ex.: ambiente
+# sempre offline, ou já sabe que vai treinar e não quer o log de erro de
+# rede no startup).
+_AUTO_DOWNLOAD_WEIGHTS = os.environ.get("VISION_DETECTOR_AUTO_DOWNLOAD_WEIGHTS", "true").lower() not in (
+    "false", "0", "no",
+)
+
 
 def _ensure_weights() -> None:
     """Baixa os pesos treinados do Hugging Face se ainda não estiverem em
-    disco (primeiro `docker compose up`, volume novo, etc.). Best-effort: se
-    falhar (ex.: sem internet), só loga a instrução de download manual --
-    os endpoints seguem de pé e reportam pesos ausentes em vez de derrubar
-    o container."""
+    disco (primeiro `docker compose up`, volume novo, etc.) e o download
+    automático não estiver desligado (VISION_DETECTOR_AUTO_DOWNLOAD_WEIGHTS).
+    Best-effort: se falhar (ex.: sem internet), só loga a instrução de
+    download manual ou de treino local -- os endpoints seguem de pé e
+    reportam pesos ausentes em vez de derrubar o container."""
     if _WEIGHTS_PATH.exists():
         logger.info("Pesos já presentes em %s", _WEIGHTS_PATH)
+        return
+
+    if not _AUTO_DOWNLOAD_WEIGHTS:
+        logger.info(
+            "Download automático desligado (VISION_DETECTOR_AUTO_DOWNLOAD_WEIGHTS=false) e pesos ausentes em %s "
+            "-- baixe manualmente (%s) ou treine localmente: docker compose run --rm vision-detector python train.py "
+            "(precisa do dataset, ver README).",
+            _WEIGHTS_PATH, _MANUAL_DOWNLOAD_HINT,
+        )
         return
 
     logger.info("Pesos não encontrados em %s -- baixando do Hugging Face (%s)...", _WEIGHTS_PATH, _HF_REPO_ID)
@@ -57,7 +80,8 @@ def _ensure_weights() -> None:
         logger.info("Pesos baixados com sucesso em %s", _WEIGHTS_PATH)
     except Exception:
         logger.exception(
-            "Download automático dos pesos falhou (rede indisponível?). Baixe manualmente: %s",
+            "Download automático dos pesos falhou (rede indisponível?). Baixe manualmente (%s) ou treine "
+            "localmente: docker compose run --rm vision-detector python train.py (precisa do dataset, ver README).",
             _MANUAL_DOWNLOAD_HINT,
         )
 
@@ -80,7 +104,11 @@ def health() -> JSONResponse:
             "status": "ok" if weights_ok else "unavailable",
             "weights_present": weights_ok,
             "weights_path": str(_WEIGHTS_PATH),
+            "auto_download_enabled": _AUTO_DOWNLOAD_WEIGHTS,
             "manual_download": None if weights_ok else _MANUAL_DOWNLOAD_HINT,
+            "train_locally": None if weights_ok else (
+                "docker compose run --rm vision-detector python train.py (precisa do dataset, ver README)"
+            ),
         },
     )
 

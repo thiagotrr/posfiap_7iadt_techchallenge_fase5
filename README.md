@@ -13,3 +13,5 @@ Os pesos treinados ficam publicados no Hugging Face Hub
 ([luisasousa/aws-architecture-vision-detector](https://huggingface.co/luisasousa/aws-architecture-vision-detector))
 e são baixados automaticamente pelo container `vision-detector` no primeiro
 `docker compose up` — não é preciso treinar o modelo do zero para usar a API.
+Quem preferir treinar seu próprio modelo localmente também pode — precisa do
+dataset de treino, ver [`docs/development.md`](docs/development.md#pesos-do-modelo-usar-o-pré-treinado-ou-treinar-localmente).

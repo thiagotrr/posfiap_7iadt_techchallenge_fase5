@@ -44,11 +44,16 @@ services:
   vision-detector:
     build:
       context: ./models/vision-detector
+    env_file:
+      - .env
     volumes:
       # Bind-mount da pasta inteira: datasets, pesos treinados (runs/) e
-      # saídas de predição são lidos/gravados direto no host, e os pesos
-      # baixados automaticamente do Hugging Face no startup (ver api.py)
-      # persistem entre reinicializações do container.
+      # saídas de predição são lidos/gravados direto no host. Os pesos --
+      # baixados automaticamente do Hugging Face no startup por padrão, ou
+      # treinados localmente via `docker compose run --rm vision-detector
+      # python train.py` (VISION_DETECTOR_AUTO_DOWNLOAD_WEIGHTS=false pra
+      # desligar o download automático, ver .env.example) -- persistem
+      # entre reinicializações do container.
       - ./models/vision-detector:/app
       # predict.py builda um extraction.schemas.ArchitectureDiagram, o
       # contrato de dados compartilhado (raiz do repo, não é específico
