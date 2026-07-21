@@ -8,3 +8,8 @@ detector de visão computacional em [`models/vision-detector`](models/vision-det
 (YOLOv8), orquestrado pelo contrato de dados em [`extraction/`](extraction/README.md).
 Ver [`docs/development.md`](docs/development.md#extração-de-diagrama-vision-detector)
 para como subir, configurar GPU ou importar o modelo direto sem Docker.
+
+Os pesos treinados ficam publicados no Hugging Face Hub
+([luisasousa/aws-architecture-vision-detector](https://huggingface.co/luisasousa/aws-architecture-vision-detector))
+e são baixados automaticamente pelo container `vision-detector` no primeiro
+`docker compose up` — não é preciso treinar o modelo do zero para usar a API.
