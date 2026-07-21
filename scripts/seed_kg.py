@@ -22,6 +22,7 @@ from dotenv import load_dotenv
 
 # Garante que a raiz do projeto está no path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,8 +31,6 @@ logging.basicConfig(
 
 from knowledge.graph_client import get_driver
 from knowledge.taxonomy_seed import run_seed
-
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 

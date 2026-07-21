@@ -19,6 +19,7 @@ import sys
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,7 +30,6 @@ from knowledge.crawler.config import CRAWL_TARGETS
 from knowledge.crawler.crawler import WebCrawler
 from knowledge.crawler.storage import CrawlStorage
 
-load_dotenv()
 logger = logging.getLogger(__name__)
 
 

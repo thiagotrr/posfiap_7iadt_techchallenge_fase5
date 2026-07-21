@@ -12,22 +12,23 @@ Módulo Dev 2. Gerencia o Knowledge Graph Neo4j com:
 
 ## Início Rápido
 
-### 1. Neo4j local (sem Docker do Dev 4)
+### 1. Neo4j (Docker Compose)
 
 ```bash
-# Opção A — Neo4j instalado localmente
-# Inicie o serviço e defina as variáveis:
-export NEO4J_URI=bolt://localhost:7687
-export NEO4J_USER=neo4j
-export NEO4J_PASSWORD=sua_senha
-
-# Opção B — Docker rápido (sem persistência)
-docker run --name neo4j-dev -d \
-  -p 7474:7474 -p 7687:7687 \
-  -e NEO4J_AUTH=neo4j/password \
-  neo4j:5-community
-export NEO4J_PASSWORD=password
+cp .env.example .env
+# ajuste NEO4J_PASSWORD se necessário
+docker compose up -d neo4j
 ```
+
+Ao rodar scripts Python **no host** (fora dos containers), aponte para o Neo4j
+local exposto pelo Compose — no `.env`, use `NEO4J_URI=bolt://localhost:7687`
+(o default `bolt://neo4j:7687` do `.env.example` vale só dentro da rede Docker).
+
+Credenciais padrão: usuário `neo4j`, senha conforme `NEO4J_PASSWORD` no `.env`
+(default `password`). Neo4j Browser: http://localhost:7474
+
+Para subir todo o stack (API, Streamlit, vision-detector), veja
+[`docs/development.md`](../docs/development.md).
 
 ### 2. Popular o KG (seed)
 
@@ -170,11 +171,8 @@ knowledge/
 # Testes unitários, sem infraestrutura externa
 pytest -m "not integration"
 
-# Testes de integração (execute a partir do host)
+# Testes de integração (Neo4j via Compose; scripts leem o .env)
 docker compose up -d neo4j
-export NEO4J_URI=bolt://localhost:7687
-export NEO4J_USER=neo4j
-export NEO4J_PASSWORD=password
 pytest -m integration
 ```
 
