@@ -37,11 +37,12 @@ def test_cors_allows_configured_streamlit_origin():
     assert response.headers["access-control-allow-origin"] == "http://localhost:8501"
 
 
-def test_extraction_stub_returns_503_not_yet_integrated():
-    response = client.get("/api/v1/extraction/anything")
+def test_extraction_unknown_route_returns_404():
+    # extraction deixou de ser stub (ver extraction/router.py) -- rota
+    # desconhecida agora se comporta como qualquer outro router real.
+    response = client.get("/api/v1/extraction/nao-existe")
 
-    assert response.status_code == 503
-    assert "not yet integrated" in response.json()["detail"]
+    assert response.status_code == 404
 
 
 def test_knowledge_unknown_route_returns_404():
