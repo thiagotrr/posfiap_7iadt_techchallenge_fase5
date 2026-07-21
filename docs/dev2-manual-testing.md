@@ -70,6 +70,8 @@ Credenciais: `neo4j` / `password` (ou valor de `NEO4J_PASSWORD` no `.env`)
 
 ## 4. Executar o Crawler completo (Épico 2)
 
+> Atenção para a opção em "Alternativa rápida"
+
 O crawler coleta documentação pública de 4 fontes de segurança:
 
 | Fonte | Provider | Documentos (exec. 2026-07-21) |
