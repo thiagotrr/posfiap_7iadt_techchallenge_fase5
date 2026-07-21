@@ -8,6 +8,7 @@ import sys
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
 
 from knowledge.ingestion.pipeline import run_ingestion
 
@@ -21,7 +22,6 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    load_dotenv()
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",

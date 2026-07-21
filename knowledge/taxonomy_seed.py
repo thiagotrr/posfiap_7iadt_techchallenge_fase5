@@ -21,7 +21,6 @@ Uso:
 """
 
 from __future__ import annotations
-from knowledge.graph_client import get_session
 
 import logging
 import os
@@ -29,6 +28,9 @@ from dotenv import load_dotenv
 
 from neo4j import Driver
 
+load_dotenv()
+
+from knowledge.graph_client import get_session
 from knowledge.graph_schema import (
     NODE_ELEMENT_TYPE,
     NODE_STRIDE_CATEGORY,
@@ -42,8 +44,6 @@ from knowledge.graph_schema import (
     STRIDE_MATRIX,
     REFERENCE_ARCHITECTURE_SERVICES,
 )
-
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 

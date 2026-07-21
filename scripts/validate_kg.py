@@ -21,6 +21,7 @@ import sys
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
 
 from knowledge.graph_client import get_driver
 
@@ -228,7 +229,6 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    load_dotenv()
     os.environ.setdefault("NEO4J_URI", "bolt://localhost:7687")
 
     driver = get_driver()

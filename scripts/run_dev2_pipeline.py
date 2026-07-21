@@ -47,6 +47,7 @@ from dotenv import load_dotenv
 # Garante imports a partir da raiz do projeto
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+load_dotenv(ROOT / ".env")
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +232,6 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    load_dotenv(ROOT / ".env")
     os.environ.setdefault("NEO4J_URI", "bolt://localhost:7687")
     os.environ.setdefault("NEO4J_USER", "neo4j")
 

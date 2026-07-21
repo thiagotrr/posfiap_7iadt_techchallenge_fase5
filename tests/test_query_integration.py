@@ -6,10 +6,10 @@ import pytest
 from dotenv import load_dotenv
 from neo4j import GraphDatabase
 
+load_dotenv()
+
 from knowledge.query import get_stride_threats
 from knowledge.taxonomy_seed import run_seed
-
-load_dotenv()
 
 
 @pytest.fixture(scope="module")
