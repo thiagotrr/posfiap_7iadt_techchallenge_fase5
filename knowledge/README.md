@@ -178,5 +178,18 @@ export NEO4J_PASSWORD=password
 pytest -m integration
 ```
 
+### Testes manuais e pipeline fim-a-fim
+
+Ver [`docs/dev2-manual-testing.md`](../docs/dev2-manual-testing.md) para o guia completo
+de execução manual (crawler, ingestão, Cypher, visualização de grafos).
+
+Script consolidado:
+
+```bash
+python scripts/run_dev2_pipeline.py              # pipeline completo
+python scripts/run_dev2_pipeline.py --sample-corpus  # sem internet
+python scripts/validate_kg.py                    # validação Cypher
+```
+
 O router é testado em uma aplicação FastAPI isolada e permanece sem registro
 no app principal; sua montagem em `/api/v1` é responsabilidade do Dev 4.
