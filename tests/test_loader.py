@@ -75,9 +75,9 @@ def test_load_s3_authentication_creates_source_and_links():
     assert result.categories_linked == 1
     queries = "\n".join(query for query, _ in driver.fake_session.calls)
     assert "MERGE (source:Source" in queries
-    assert "COVERS_SERVICE" in queries
-    assert "COVERS_CATEGORY" in queries
-    assert "HAS_SPECIFIC_THREAT" in queries
+    assert "COBRE_SERVICO" in queries
+    assert "COBRE_CATEGORIA" in queries
+    assert "POSSUI_AMEACA_ESPECIFICA" in queries
     assert driver.fake_session.calls[1][1]["services"] == ["S3"]
     assert driver.fake_session.calls[2][1]["tags"] == ["S"]
 

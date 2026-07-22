@@ -71,8 +71,8 @@ def test_combines_enrichment_and_normalizes_service_alias():
     assert result.total_threats == 1
     assert len(result.stride_results[0].mitigations) == 1
     assert session.run.call_args_list[2].kwargs["cloud_service"] == "S3"
-    assert "COVERS_SERVICE" in session.run.call_args_list[2].args[0]
-    assert "COVERS_CATEGORY" in session.run.call_args_list[2].args[0]
+    assert "COBRE_SERVICO" in session.run.call_args_list[2].args[0]
+    assert "COBRE_CATEGORIA" in session.run.call_args_list[2].args[0]
 
 
 def test_uses_stride_canonical_order():
