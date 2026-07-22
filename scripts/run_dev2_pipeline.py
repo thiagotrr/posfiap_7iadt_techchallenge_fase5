@@ -26,6 +26,12 @@ Uso:
     # Apenas validação (Neo4j já populado)
     python scripts/run_dev2_pipeline.py --validate-only
 
+    # Pular subida do Neo4j e crawl, forçando re-ingestão
+    python scripts/run_dev2_pipeline.py --skip-neo4j-start --skip-crawl --force
+
+    # Pular subida do Neo4j e crawl, forçando re-ingestão e exportando amostra da taxonomia
+    python scripts/run_dev2_pipeline.py --skip-neo4j-start --skip-crawl --force --export-graph data/kg_sample.json --graph-sample 30
+
 Variáveis de ambiente (ver .env.example):
     NEO4J_URI, NEO4J_USER, NEO4J_PASSWORD  — conexão Neo4j (obrigatórias)
     KG_CLASSIFIER_LLM_PROVIDER, OPENAI_API_KEY / GOOGLE_API_KEY — classificador LLM
@@ -98,9 +104,9 @@ def check_prerequisites() -> None:
             "NEO4J_PASSWORD não definida. Copie .env.example → .env e configure."
         )
 
-    # Ao rodar do host, URI deve apontar para localhost (não o nome do container)
+    # Ao rodar do host, URI Docker interna (bolt://neo4j:7687) deve usar localhost
     uri = os.environ.get("NEO4J_URI", "bolt://localhost:7687")
-    if "neo4j:" in uri and "localhost" not in uri:
+    if uri.startswith("bolt://neo4j:") and "localhost" not in uri:
         logger.warning(
             "NEO4J_URI=%s parece ser a URI interna do Docker. "
             "Do host, use bolt://localhost:7687",
