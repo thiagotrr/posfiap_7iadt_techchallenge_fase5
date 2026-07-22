@@ -12,10 +12,10 @@ from knowledge.graph_schema import (
     NODE_CLOUD_SERVICE,
     NODE_SOURCE,
     NODE_STRIDE_CATEGORY,
-    REL_COVERS_CATEGORY,
-    REL_COVERS_SERVICE,
-    REL_HAS_SPECIFIC_MITIGATION,
-    REL_HAS_SPECIFIC_THREAT,
+    REL_COBRE_CATEGORIA,
+    REL_COBRE_SERVICO,
+    REL_POSSUI_AMEACA_ESPECIFICA,
+    REL_POSSUI_MITIGACAO_ESPECIFICA,
     REL_INCLUI_AMEACA,
     REL_MITIGADA_POR,
     REL_REFERENCIADA_EM,
@@ -74,7 +74,7 @@ class KGLoader:
                 MATCH (source:{NODE_SOURCE} {{id: $source_id}})
                 UNWIND $services AS service_name
                 MATCH (service:{NODE_CLOUD_SERVICE} {{name: service_name}})
-                MERGE (source)-[:{REL_COVERS_SERVICE}]->(service)
+                MERGE (source)-[:{REL_COBRE_SERVICO}]->(service)
                 RETURN count(DISTINCT service) AS linked
                 """,
                 source_id=source_id,
@@ -86,7 +86,7 @@ class KGLoader:
                 MATCH (source:{NODE_SOURCE} {{id: $source_id}})
                 UNWIND $tags AS tag
                 MATCH (category:{NODE_STRIDE_CATEGORY} {{letter: tag}})
-                MERGE (source)-[:{REL_COVERS_CATEGORY}]->(category)
+                MERGE (source)-[:{REL_COBRE_CATEGORIA}]->(category)
                 RETURN count(DISTINCT category) AS linked
                 """,
                 source_id=source_id,
@@ -101,11 +101,11 @@ class KGLoader:
                 UNWIND $tags AS tag
                 MATCH (category:{NODE_STRIDE_CATEGORY} {{letter: tag}})
                       -[:{REL_INCLUI_AMEACA}]->(threat)
-                MERGE (service)-[:{REL_HAS_SPECIFIC_THREAT}]->(threat)
+                MERGE (service)-[:{REL_POSSUI_AMEACA_ESPECIFICA}]->(threat)
                 WITH source, service, threat
                 OPTIONAL MATCH (threat)-[:{REL_MITIGADA_POR}]->(mitigation)
                 FOREACH (_ IN CASE WHEN mitigation IS NULL THEN [] ELSE [1] END |
-                    MERGE (service)-[:{REL_HAS_SPECIFIC_MITIGATION}]->(mitigation)
+                    MERGE (service)-[:{REL_POSSUI_MITIGACAO_ESPECIFICA}]->(mitigation)
                     MERGE (mitigation)-[:{REL_REFERENCIADA_EM}]->(source)
                 )
                 """,

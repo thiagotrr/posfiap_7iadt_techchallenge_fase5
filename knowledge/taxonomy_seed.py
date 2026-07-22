@@ -37,6 +37,7 @@ from knowledge.graph_schema import (
     NODE_THREAT,
     NODE_MITIGATION,
     NODE_CLOUD_SERVICE,
+    NODE_SOURCE,
     REL_SUSCETIVEL_A,
     REL_INCLUI_AMEACA,
     REL_MITIGADA_POR,
@@ -433,7 +434,7 @@ def _create_constraints(session) -> None:
         NODE_THREAT,
         NODE_MITIGATION,
         NODE_CLOUD_SERVICE,
-        "Source",
+        NODE_SOURCE,
     ]
     for label in labels:
         constraint_name = f"constraint_{label.lower()}_id_unique"

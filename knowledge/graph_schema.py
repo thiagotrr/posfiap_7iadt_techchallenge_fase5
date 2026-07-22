@@ -35,14 +35,16 @@ REL_INSTANCIA_DE = "INSTANCIA_DE"          # (:CloudService)-[:INSTANCIA_DE]->(:
 REL_REFERENCIADA_EM = "REFERENCIADA_EM"    # (:Mitigation)-[:REFERENCIADA_EM]->(:Source)
 
 # Relacionamentos usados pelo pipeline de ingestão (Épicos 2–3)
-REL_COVERS_SERVICE = "COVERS_SERVICE"      # (:Source)-[:COVERS_SERVICE]->(:CloudService)
-REL_COVERS_CATEGORY = "COVERS_CATEGORY"   # (:Source)-[:COVERS_CATEGORY]->(:STRIDECategory)
-REL_HAS_SPECIFIC_THREAT = "HAS_SPECIFIC_THREAT"
-REL_HAS_SPECIFIC_MITIGATION = "HAS_SPECIFIC_MITIGATION"
+REL_COBRE_SERVICO = "COBRE_SERVICO"              # (:Source)-[:COBRE_SERVICO]->(:CloudService)
+REL_COBRE_CATEGORIA = "COBRE_CATEGORIA"          # (:Source)-[:COBRE_CATEGORIA]->(:STRIDECategory)
+REL_POSSUI_AMEACA_ESPECIFICA = "POSSUI_AMEACA_ESPECIFICA"      # (:CloudService)-[:POSSUI_AMEACA_ESPECIFICA]->(:Threat)
+REL_POSSUI_MITIGACAO_ESPECIFICA = "POSSUI_MITIGACAO_ESPECIFICA"  # (:CloudService)-[:POSSUI_MITIGACAO_ESPECIFICA]->(:Mitigation)
 
-# Aliases legados do contrato inicial; mantidos para imports existentes.
-REL_POSSUI_AMEACA_ESPECIFICA = REL_HAS_SPECIFIC_THREAT
-REL_POSSUI_MITIGACAO_ESPECIFICA = REL_HAS_SPECIFIC_MITIGATION
+# Aliases legados en_US do contrato inicial; mantidos para compatibilidade retroativa.
+REL_COVERS_SERVICE = REL_COBRE_SERVICO
+REL_COVERS_CATEGORY = REL_COBRE_CATEGORIA
+REL_HAS_SPECIFIC_THREAT = REL_POSSUI_AMEACA_ESPECIFICA
+REL_HAS_SPECIFIC_MITIGATION = REL_POSSUI_MITIGACAO_ESPECIFICA
 
 # ---------------------------------------------------------------------------
 # Valores canônicos de ElementType

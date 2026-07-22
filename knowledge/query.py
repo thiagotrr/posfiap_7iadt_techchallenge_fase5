@@ -25,10 +25,10 @@ from knowledge.graph_schema import (
     NODE_SOURCE,
     NODE_STRIDE_CATEGORY,
     NODE_THREAT,
-    REL_COVERS_CATEGORY,
-    REL_COVERS_SERVICE,
-    REL_HAS_SPECIFIC_MITIGATION,
-    REL_HAS_SPECIFIC_THREAT,
+    REL_COBRE_CATEGORIA,
+    REL_COBRE_SERVICO,
+    REL_POSSUI_AMEACA_ESPECIFICA,
+    REL_POSSUI_MITIGACAO_ESPECIFICA,
     REL_INCLUI_AMEACA,
     REL_INSTANCIA_DE,
     REL_MITIGADA_POR,
@@ -71,11 +71,11 @@ MATCH (service:{NODE_CLOUD_SERVICE} {{name: $cloud_service}})
       -[:{REL_INSTANCIA_DE}]->(element:{NODE_ELEMENT_TYPE} {{id: $element_type}})
 MATCH (element)-[:{REL_SUSCETIVEL_A}]->(category:{NODE_STRIDE_CATEGORY})
       -[:{REL_INCLUI_AMEACA}]->(threat:{NODE_THREAT})
-MATCH (service)-[:{REL_HAS_SPECIFIC_THREAT}]->(threat)
-MATCH (source:{NODE_SOURCE})-[:{REL_COVERS_SERVICE}]->(service)
-MATCH (source)-[:{REL_COVERS_CATEGORY}]->(category)
+MATCH (service)-[:{REL_POSSUI_AMEACA_ESPECIFICA}]->(threat)
+MATCH (source:{NODE_SOURCE})-[:{REL_COBRE_SERVICO}]->(service)
+MATCH (source)-[:{REL_COBRE_CATEGORIA}]->(category)
 OPTIONAL MATCH (threat)-[:{REL_MITIGADA_POR}]->(mitigation:{NODE_MITIGATION})
-      <-[:{REL_HAS_SPECIFIC_MITIGATION}]-(service)
+      <-[:{REL_POSSUI_MITIGACAO_ESPECIFICA}]-(service)
 RETURN category.letter AS category_letter,
        category.name AS category_name,
        threat.id AS threat_id,

@@ -122,7 +122,7 @@ O pipeline de ingestão:
 1. Verifica se a taxonomia STRIDE está seedada (4 ElementTypes, 6 STRIDECategories)
 2. Executa seed se necessário (`knowledge/taxonomy_seed.py`)
 3. Classifica cada documento (LLM → heurística → `stride_hint` do crawler)
-4. Cria nós `Source` e relacionamentos `COVERS_SERVICE`, `COVERS_CATEGORY`
+4. Cria nós `Source` e relacionamentos `COBRE_SERVICO`, `COBRE_CATEGORIA`
 
 ```powershell
 $env:NEO4J_URI = "bolt://localhost:7687"
@@ -217,7 +217,7 @@ LIMIT 20
 MATCH (source:Source)
 RETURN count(source) AS total_sources
 
-MATCH (source:Source)-[:COVERS_CATEGORY]->(sc:STRIDECategory)
+MATCH (source:Source)-[:COBRE_CATEGORIA]->(sc:STRIDECategory)
 RETURN sc.letter, count(source) AS docs
 ORDER BY docs DESC
 ```
@@ -249,7 +249,7 @@ RETURN cs, et, sc LIMIT 30
 ### Grafo 3 — Enriquecimento (Sources + categorias)
 
 ```cypher
-MATCH (source:Source)-[:COVERS_CATEGORY]->(sc:STRIDECategory)
+MATCH (source:Source)-[:COBRE_CATEGORIA]->(sc:STRIDECategory)
 RETURN source, sc LIMIT 25
 ```
 
@@ -259,7 +259,7 @@ RETURN source, sc LIMIT 25
 MATCH (cs:CloudService {name: 'S3'})-[:INSTANCIA_DE]->(et:ElementType)
       -[:SUSCETIVEL_A]->(sc:STRIDECategory)
       -[:INCLUI_AMEACA]->(t:Threat)
-OPTIONAL MATCH (source:Source)-[:COVERS_SERVICE]->(cs)
+OPTIONAL MATCH (source:Source)-[:COBRE_SERVICO]->(cs)
 RETURN cs, et, sc, t, source
 ```
 

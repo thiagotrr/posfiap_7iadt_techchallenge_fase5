@@ -29,11 +29,11 @@ e os serviços de nuvem do diagrama de referência como nós `CloudService`.
 | `INCLUI_AMEACA` | `STRIDECategory` → `Threat` | — |
 | `MITIGADA_POR` | `Threat` → `Mitigation` | — |
 | `INSTANCIA_DE` | `CloudService` → `ElementType` | — |
-| `HAS_SPECIFIC_THREAT` | `CloudService` → `Threat` | — |
-| `HAS_SPECIFIC_MITIGATION` | `CloudService` → `Mitigation` | — |
+| `POSSUI_AMEACA_ESPECIFICA` | `CloudService` → `Threat` | — |
+| `POSSUI_MITIGACAO_ESPECIFICA` | `CloudService` → `Mitigation` | — |
 | `REFERENCIADA_EM` | `Mitigation` → `Source` | — |
-| `COVERS_SERVICE` | `Source` → `CloudService` | — |
-| `COVERS_CATEGORY` | `Source` → `STRIDECategory` | — |
+| `COBRE_SERVICO` | `Source` → `CloudService` | — |
+| `COBRE_CATEGORIA` | `Source` → `STRIDECategory` | — |
 
 ---
 
@@ -97,9 +97,9 @@ MATCH (cs:CloudService {name: $cloud_service})
       -[:SUSCETIVEL_A]->(sc:STRIDECategory)
       -[:INCLUI_AMEACA]->(t:Threat)
       -[:MITIGADA_POR]->(m:Mitigation)
-OPTIONAL MATCH (cs)-[:HAS_SPECIFIC_THREAT]->(specific_t:Threat)
+OPTIONAL MATCH (cs)-[:POSSUI_AMEACA_ESPECIFICA]->(specific_t:Threat)
 OPTIONAL MATCH (specific_t)-[:MITIGADA_POR]->(specific_m:Mitigation)
-OPTIONAL MATCH (cs)-[:HAS_SPECIFIC_MITIGATION]->(specific_m)
+OPTIONAL MATCH (cs)-[:POSSUI_MITIGACAO_ESPECIFICA]->(specific_m)
 RETURN sc.letter, sc.name,
        collect(DISTINCT t)          AS taxonomy_threats,
        collect(DISTINCT m)          AS taxonomy_mitigations,

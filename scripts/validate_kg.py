@@ -24,6 +24,12 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv()
 
 from knowledge.graph_client import get_driver
+from knowledge.graph_schema import (
+    REL_COBRE_CATEGORIA,
+    REL_COBRE_SERVICO,
+    REL_INSTANCIA_DE,
+    REL_SUSCETIVEL_A,
+)
 
 
 def _run_query(session, cypher: str, params: dict | None = None) -> list[dict]:
@@ -125,10 +131,10 @@ def validate_enrichment(session) -> None:
     print_section("Enriquecimento pós-ingestão")
     rows = _run_query(
         session,
-        """
+        f"""
         MATCH (source:Source)
-        OPTIONAL MATCH (source)-[:COVERS_SERVICE]->(cs:CloudService)
-        OPTIONAL MATCH (source)-[:COVERS_CATEGORY]->(sc:STRIDECategory)
+        OPTIONAL MATCH (source)-[:{REL_COBRE_SERVICO}]->(cs:CloudService)
+        OPTIONAL MATCH (source)-[:{REL_COBRE_CATEGORIA}]->(sc:STRIDECategory)
         RETURN count(DISTINCT source) AS sources,
                count(DISTINCT cs) AS services_covered,
                count(DISTINCT sc) AS categories_covered
@@ -141,8 +147,8 @@ def validate_enrichment(session) -> None:
 
     rows = _run_query(
         session,
-        """
-        MATCH (source:Source)-[:COVERS_SERVICE]->(cs:CloudService)
+        f"""
+        MATCH (source:Source)-[:{REL_COBRE_SERVICO}]->(cs:CloudService)
         RETURN cs.name AS service, count(source) AS doc_count
         ORDER BY doc_count DESC
         LIMIT 10
@@ -159,10 +165,10 @@ def validate_graph_sample(session, limit: int) -> None:
     print_section(f"Amostra de subgrafo (até {limit} nós)")
     rows = _run_query(
         session,
-        """
-        MATCH (source:Source)-[:COVERS_SERVICE]->(cs:CloudService)
-              -[:INSTANCIA_DE]->(et:ElementType)
-              -[:SUSCETIVEL_A]->(sc:STRIDECategory)
+        f"""
+        MATCH (source:Source)-[:{REL_COBRE_SERVICO}]->(cs:CloudService)
+              -[:{REL_INSTANCIA_DE}]->(et:ElementType)
+              -[:{REL_SUSCETIVEL_A}]->(sc:STRIDECategory)
         RETURN source.title AS source_title,
                cs.name AS cloud_service,
                et.id AS element_type,
@@ -187,10 +193,10 @@ def validate_graph_sample(session, limit: int) -> None:
 
     print("\n  Cypher para visualizar no Neo4j Browser (http://localhost:7474):")
     print(
-        """
-  MATCH (source:Source)-[:COVERS_SERVICE]->(cs:CloudService)
-        -[:INSTANCIA_DE]->(et:ElementType)
-        -[:SUSCETIVEL_A]->(sc:STRIDECategory)
+        f"""
+  MATCH (source:Source)-[:{REL_COBRE_SERVICO}]->(cs:CloudService)
+        -[:{REL_INSTANCIA_DE}]->(et:ElementType)
+        -[:{REL_SUSCETIVEL_A}]->(sc:STRIDECategory)
   RETURN source, cs, et, sc LIMIT 25
     """.strip()
     )
