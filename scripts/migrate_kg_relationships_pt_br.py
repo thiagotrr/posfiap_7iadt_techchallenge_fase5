@@ -33,21 +33,20 @@ from knowledge.graph_client import get_driver
 from knowledge.graph_schema import (
     REL_COBRE_CATEGORIA,
     REL_COBRE_SERVICO,
-    REL_COVERS_CATEGORY,
-    REL_COVERS_SERVICE,
-    REL_HAS_SPECIFIC_MITIGATION,
-    REL_HAS_SPECIFIC_THREAT,
     REL_POSSUI_AMEACA_ESPECIFICA,
     REL_POSSUI_MITIGACAO_ESPECIFICA,
 )
 
 logger = logging.getLogger(__name__)
 
+# Chaves legadas en_US persistidas no Neo4j antes da migração semântica.
+# Não usar REL_COVERS_* / REL_HAS_SPECIFIC_* do graph_schema: são aliases
+# apontando para os valores pt_BR atuais e não representam os tipos antigos.
 RELATIONSHIP_RENAMES: dict[str, str] = {
-    REL_COVERS_SERVICE: REL_COBRE_SERVICO,
-    REL_COVERS_CATEGORY: REL_COBRE_CATEGORIA,
-    REL_HAS_SPECIFIC_THREAT: REL_POSSUI_AMEACA_ESPECIFICA,
-    REL_HAS_SPECIFIC_MITIGATION: REL_POSSUI_MITIGACAO_ESPECIFICA,
+    "COVERS_SERVICE": REL_COBRE_SERVICO,
+    "COVERS_CATEGORY": REL_COBRE_CATEGORIA,
+    "HAS_SPECIFIC_THREAT": REL_POSSUI_AMEACA_ESPECIFICA,
+    "HAS_SPECIFIC_MITIGATION": REL_POSSUI_MITIGACAO_ESPECIFICA,
 }
 
 
