@@ -1,0 +1,443 @@
+{
+  "version": "v1",
+  "$comment": "Contrato de saída da orquestração STRIDE (Dev 3 → Dev 4). Gerado a partir de orchestration.models — não editar à mão.",
+  "STRIDEReport": {
+    "$defs": {
+      "ComponentAnalysis": {
+        "description": "Análise STRIDE completa de um único componente do diagrama.",
+        "properties": {
+          "component_id": {
+            "title": "Component Id",
+            "type": "string"
+          },
+          "component_name": {
+            "title": "Component Name",
+            "type": "string"
+          },
+          "element_type": {
+            "title": "Element Type",
+            "type": "string"
+          },
+          "cloud_service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Cloud Service"
+          },
+          "trust_boundary": {
+            "title": "Trust Boundary",
+            "type": "string"
+          },
+          "stride_entries": {
+            "items": {
+              "$ref": "#/$defs/STRIDEThreatEntry"
+            },
+            "title": "Stride Entries",
+            "type": "array"
+          },
+          "llm_reasoning": {
+            "title": "Llm Reasoning",
+            "type": "string"
+          },
+          "analyzed_at": {
+            "title": "Analyzed At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "component_id",
+          "component_name",
+          "element_type",
+          "trust_boundary",
+          "stride_entries",
+          "llm_reasoning",
+          "analyzed_at"
+        ],
+        "title": "ComponentAnalysis",
+        "type": "object"
+      },
+      "STRIDEThreatEntry": {
+        "description": "Uma ameaça STRIDE contextualizada para um componente específico.",
+        "properties": {
+          "category": {
+            "enum": [
+              "S",
+              "T",
+              "R",
+              "I",
+              "D",
+              "E"
+            ],
+            "title": "Category",
+            "type": "string"
+          },
+          "category_name": {
+            "default": "",
+            "title": "Category Name",
+            "type": "string"
+          },
+          "threat_name": {
+            "title": "Threat Name",
+            "type": "string"
+          },
+          "threat_description": {
+            "title": "Threat Description",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity",
+            "type": "string"
+          },
+          "mitigations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Mitigations",
+            "type": "array"
+          },
+          "source": {
+            "enum": [
+              "taxonomy",
+              "enriched",
+              "both",
+              "llm_only"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "threat_name",
+          "threat_description",
+          "severity",
+          "mitigations",
+          "source"
+        ],
+        "title": "STRIDEThreatEntry",
+        "type": "object"
+      }
+    },
+    "description": "Relatório final consolidado de toda a análise STRIDE do diagrama.",
+    "properties": {
+      "diagram_provider": {
+        "title": "Diagram Provider",
+        "type": "string"
+      },
+      "total_components": {
+        "title": "Total Components",
+        "type": "integer"
+      },
+      "total_threats": {
+        "title": "Total Threats",
+        "type": "integer"
+      },
+      "generated_at": {
+        "title": "Generated At",
+        "type": "string"
+      },
+      "component_analyses": {
+        "items": {
+          "$ref": "#/$defs/ComponentAnalysis"
+        },
+        "title": "Component Analyses",
+        "type": "array"
+      },
+      "stride_matrix": {
+        "additionalProperties": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "title": "Stride Matrix",
+        "type": "object"
+      },
+      "risk_summary": {
+        "additionalProperties": true,
+        "title": "Risk Summary",
+        "type": "object"
+      }
+    },
+    "required": [
+      "diagram_provider",
+      "total_components",
+      "total_threats",
+      "generated_at",
+      "component_analyses",
+      "stride_matrix",
+      "risk_summary"
+    ],
+    "title": "STRIDEReport",
+    "type": "object"
+  },
+  "GraphStateResponse": {
+    "$defs": {
+      "ComponentAnalysis": {
+        "description": "Análise STRIDE completa de um único componente do diagrama.",
+        "properties": {
+          "component_id": {
+            "title": "Component Id",
+            "type": "string"
+          },
+          "component_name": {
+            "title": "Component Name",
+            "type": "string"
+          },
+          "element_type": {
+            "title": "Element Type",
+            "type": "string"
+          },
+          "cloud_service": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Cloud Service"
+          },
+          "trust_boundary": {
+            "title": "Trust Boundary",
+            "type": "string"
+          },
+          "stride_entries": {
+            "items": {
+              "$ref": "#/$defs/STRIDEThreatEntry"
+            },
+            "title": "Stride Entries",
+            "type": "array"
+          },
+          "llm_reasoning": {
+            "title": "Llm Reasoning",
+            "type": "string"
+          },
+          "analyzed_at": {
+            "title": "Analyzed At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "component_id",
+          "component_name",
+          "element_type",
+          "trust_boundary",
+          "stride_entries",
+          "llm_reasoning",
+          "analyzed_at"
+        ],
+        "title": "ComponentAnalysis",
+        "type": "object"
+      },
+      "STRIDEReport": {
+        "description": "Relatório final consolidado de toda a análise STRIDE do diagrama.",
+        "properties": {
+          "diagram_provider": {
+            "title": "Diagram Provider",
+            "type": "string"
+          },
+          "total_components": {
+            "title": "Total Components",
+            "type": "integer"
+          },
+          "total_threats": {
+            "title": "Total Threats",
+            "type": "integer"
+          },
+          "generated_at": {
+            "title": "Generated At",
+            "type": "string"
+          },
+          "component_analyses": {
+            "items": {
+              "$ref": "#/$defs/ComponentAnalysis"
+            },
+            "title": "Component Analyses",
+            "type": "array"
+          },
+          "stride_matrix": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "title": "Stride Matrix",
+            "type": "object"
+          },
+          "risk_summary": {
+            "additionalProperties": true,
+            "title": "Risk Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "diagram_provider",
+          "total_components",
+          "total_threats",
+          "generated_at",
+          "component_analyses",
+          "stride_matrix",
+          "risk_summary"
+        ],
+        "title": "STRIDEReport",
+        "type": "object"
+      },
+      "STRIDEThreatEntry": {
+        "description": "Uma ameaça STRIDE contextualizada para um componente específico.",
+        "properties": {
+          "category": {
+            "enum": [
+              "S",
+              "T",
+              "R",
+              "I",
+              "D",
+              "E"
+            ],
+            "title": "Category",
+            "type": "string"
+          },
+          "category_name": {
+            "default": "",
+            "title": "Category Name",
+            "type": "string"
+          },
+          "threat_name": {
+            "title": "Threat Name",
+            "type": "string"
+          },
+          "threat_description": {
+            "title": "Threat Description",
+            "type": "string"
+          },
+          "severity": {
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ],
+            "title": "Severity",
+            "type": "string"
+          },
+          "mitigations": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Mitigations",
+            "type": "array"
+          },
+          "source": {
+            "enum": [
+              "taxonomy",
+              "enriched",
+              "both",
+              "llm_only"
+            ],
+            "title": "Source",
+            "type": "string"
+          }
+        },
+        "required": [
+          "category",
+          "threat_name",
+          "threat_description",
+          "severity",
+          "mitigations",
+          "source"
+        ],
+        "title": "STRIDEThreatEntry",
+        "type": "object"
+      }
+    },
+    "description": "Visão serializável do estado do grafo para polling via API (Dev 4).",
+    "properties": {
+      "thread_id": {
+        "title": "Thread Id",
+        "type": "string"
+      },
+      "status": {
+        "enum": [
+          "running",
+          "hitl_pending",
+          "completed",
+          "error"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "components_analyzed_count": {
+        "title": "Components Analyzed Count",
+        "type": "integer"
+      },
+      "components_total": {
+        "title": "Components Total",
+        "type": "integer"
+      },
+      "analyzed_component_ids": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Analyzed Component Ids",
+        "type": "array"
+      },
+      "components_failed_count": {
+        "default": 0,
+        "title": "Components Failed Count",
+        "type": "integer"
+      },
+      "hitl_summary": {
+        "anyOf": [
+          {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hitl Summary"
+      },
+      "report": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/STRIDEReport"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "thread_id",
+      "status",
+      "components_analyzed_count",
+      "components_total"
+    ],
+    "title": "GraphStateResponse",
+    "type": "object"
+  }
+}

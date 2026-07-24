@@ -51,8 +51,14 @@ def test_knowledge_unknown_route_returns_404():
     assert response.status_code == 404
 
 
-def test_orchestration_stub_returns_503_not_yet_integrated():
-    response = client.get("/api/v1/orchestration/anything")
+def test_orchestration_router_montado():
+    # Integração Dev 3: o router real substituiu o stub 503.
+    health = client.get("/api/v1/orchestration/health")
+    assert health.status_code == 200
+    assert health.json()["status"] == "ok"
 
-    assert response.status_code == 503
-    assert "not yet integrated" in response.json()["detail"]
+
+def test_orchestration_unknown_route_returns_404():
+    response = client.get("/api/v1/orchestration/nao-existe")
+
+    assert response.status_code == 404
