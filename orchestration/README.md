@@ -4,10 +4,10 @@ Grafo LangGraph que conecta a extração do diagrama (Dev 1) à base de
 conhecimento STRIDE (Dev 2), itera por componente, gera ameaças/mitigações via
 LLM, oferece checkpoint HITL (`interrupt()`) e produz o relatório final.
 
-> **Estado atual: Épicos 1–4 concluídos.** Retrieval (com fallback), geração via
-> LLM, HITL real e API estão implementados e testados. Os módulos reais de Dev 1
-> (`extraction`) e Dev 2 (`knowledge`) ainda são stubs de contrato — a troca é
-> indolor se os campos baterem (ver `docs/contrato-integracao.md`).
+> **Estado atual: Épicos 1–4 concluídos e integrados.** Retrieval (com fallback),
+> geração via LLM, HITL real e API estão implementados e testados **contra os
+> módulos reais** de Dev 1 (`extraction`) e Dev 2 (`knowledge`); a orquestração foi
+> integrada ao repositório do grupo (PR mergeado no `main`).
 
 ## Topologia
 
@@ -98,7 +98,7 @@ Via `os.environ` (nenhuma chave hardcodada; use `.env` a partir de `.env.example
   evitar 429 nas ~14 chamadas sequenciais de uma análise)
 
 **Gemini** é integrado via o **endpoint OpenAI-compatível do Google** (reusa o
-cliente `openai` já pinado — sem nova dependência, mantém `pydantic==2.9.2`).
+cliente `openai` já pinado — sem nova dependência).
 
 Em testes, mocke `LLMAnalysisClient.analyze` (ou o SDK). Valide a conexão real
 com `python scripts/smoke_llm.py` (uma chamada, custo mínimo).
@@ -119,12 +119,11 @@ com `python scripts/smoke_llm.py` (uma chamada, custo mínimo).
 
 - `MemorySaver` em memória: sessões HITL perdidas em restart do servidor
   (`AsyncSqliteSaver`/`RedisSaver` como melhoria futura).
-- `extraction`/`knowledge` reais pendentes de Dev 1/Dev 2 (hoje stubs + fixtures).
 - Refinamento HITL aplica o feedback a todos os componentes (direcionado a um
   componente específico é melhoria futura).
 
 ## Documentação relacionada
 
-- `docs/contrato-integracao.md` — contrato campo a campo com Dev 1/Dev 2.
-- `docs/epico-{1,2,3,4}-entregaveis.md` — entregáveis por épico.
-- `docs/revisao-epico-{1,2,3,4}.md` — revisões arquiteturais.
+- `orchestration/schemas_v1.json` — snapshot do contrato de saída (`STRIDEReport`,
+  `GraphStateResponse`) com teste anti-drift (`tests/orchestration/test_fixtures_schema.py`).
+- `docs/development.md` — como subir o ambiente e rodar os serviços.

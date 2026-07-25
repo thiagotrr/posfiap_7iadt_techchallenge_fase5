@@ -27,8 +27,10 @@ def test_example_stride_report_consistente():
     ids = {a.component_id for a in report.component_analyses}
     for componentes in report.stride_matrix.values():
         assert set(componentes) <= ids
-    # risk_summary soma igual ao total de ameaças.
-    assert sum(report.risk_summary.values()) == report.total_threats
+    # As contagens por severidade somam o total de ameaças. (O risk_summary
+    # enriquecido também traz by_category/coberturas, que não entram nessa soma.)
+    _sev = ("critical", "high", "medium", "low")
+    assert sum(report.risk_summary[s] for s in _sev) == report.total_threats
 
 
 def test_example_stride_report_roundtrip():
