@@ -91,3 +91,34 @@ class APIClient:
             json={"diagram": diagram, "patch": patch},
             timeout=30.0,
         )
+
+    def start_analysis(self, diagram: dict) -> dict:
+        # orchestration.service.run_analysis roda de forma síncrona até o
+        # checkpoint HITL (várias chamadas LLM sequenciais, uma por
+        # componente) -- timeout generoso, sem polling no lado do cliente.
+        return self._request_json(
+            "POST", "orchestration/analyses", json=diagram, timeout=600.0
+        )
+
+    def get_analysis_state(self, thread_id: str) -> dict:
+        return self._request_json(
+            "GET", f"orchestration/analyses/{thread_id}", timeout=30.0
+        )
+
+    def send_hitl_message(
+        self, thread_id: str, action: str, feedback: str | None = None
+    ) -> dict:
+        payload: dict = {"action": action}
+        if feedback is not None:
+            payload["feedback"] = feedback
+        return self._request_json(
+            "POST",
+            f"orchestration/analyses/{thread_id}/messages",
+            json=payload,
+            timeout=600.0,
+        )
+
+    def get_report(self, thread_id: str) -> dict:
+        return self._request_json(
+            "GET", f"orchestration/analyses/{thread_id}/report", timeout=30.0
+        )

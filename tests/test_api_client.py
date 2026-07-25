@@ -103,6 +103,91 @@ def test_apply_patch_422_raises_api_error():
         client.apply_patch({"components": []}, {"patches": []})
 
 
+def test_start_analysis_posts_diagram_body_to_orchestration_analyses():
+    captured = {}
+
+    def handler(request):
+        captured["url"] = str(request.url)
+        captured["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"thread_id": "t1", "status": "hitl_pending"})
+
+    client = _client(handler)
+    result = client.start_analysis({"components": []})
+
+    assert captured["url"] == "http://testserver/api/v1/orchestration/analyses"
+    assert captured["body"] == {"components": []}
+    assert result == {"thread_id": "t1", "status": "hitl_pending"}
+
+
+def test_get_analysis_state_gets_thread_state():
+    def handler(request):
+        assert str(request.url) == "http://testserver/api/v1/orchestration/analyses/t1"
+        return httpx.Response(200, json={"thread_id": "t1", "status": "running"})
+
+    client = _client(handler)
+    assert client.get_analysis_state("t1") == {"thread_id": "t1", "status": "running"}
+
+
+def test_get_analysis_state_404_raises_api_error():
+    def handler(request):
+        return httpx.Response(404, json={"error": "NotFound", "detail": "análise não encontrada"})
+
+    client = _client(handler)
+    with pytest.raises(APIError) as exc_info:
+        client.get_analysis_state("desconhecido")
+    assert exc_info.value.status_code == 404
+
+
+def test_send_hitl_message_approve_omits_feedback():
+    captured = {}
+
+    def handler(request):
+        captured["url"] = str(request.url)
+        captured["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"thread_id": "t1", "status": "completed"})
+
+    client = _client(handler)
+    result = client.send_hitl_message("t1", "approve")
+
+    assert captured["url"] == "http://testserver/api/v1/orchestration/analyses/t1/messages"
+    assert captured["body"] == {"action": "approve"}
+    assert result == {"thread_id": "t1", "status": "completed"}
+
+
+def test_send_hitl_message_refine_includes_feedback():
+    captured = {}
+
+    def handler(request):
+        captured["body"] = json.loads(request.content)
+        return httpx.Response(200, json={"thread_id": "t1", "status": "hitl_pending"})
+
+    client = _client(handler)
+    client.send_hitl_message("t1", "refine", feedback="revisar o componente c1")
+
+    assert captured["body"] == {"action": "refine", "feedback": "revisar o componente c1"}
+
+
+def test_get_report_returns_report_json():
+    def handler(request):
+        assert str(request.url) == "http://testserver/api/v1/orchestration/analyses/t1/report"
+        return httpx.Response(200, json={"diagram_provider": "aws"})
+
+    client = _client(handler)
+    assert client.get_report("t1") == {"diagram_provider": "aws"}
+
+
+def test_get_report_404_raises_api_error_when_not_available():
+    def handler(request):
+        return httpx.Response(
+            404, json={"error": "NotFound", "detail": "relatório ainda não disponível"}
+        )
+
+    client = _client(handler)
+    with pytest.raises(APIError) as exc_info:
+        client.get_report("t1")
+    assert exc_info.value.status_code == 404
+
+
 def test_check_health_200_with_invalid_json_raises_api_error():
     """Verifies that a 2xx response with malformed JSON is caught and wrapped
     in APIError instead of raising a raw JSONDecodeError/ValueError."""
