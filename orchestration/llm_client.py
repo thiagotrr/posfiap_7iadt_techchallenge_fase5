@@ -108,6 +108,29 @@ def _wrap_object_schema(array_schema: dict, *, additional_properties_false: bool
     return wrapper
 
 
+def _unwrap_threats(payload, *, is_json_string: bool) -> str:
+    """Desembrulha {"threats": [...]} e retorna a STRING JSON do array.
+
+    Falhas de FORMA da resposta do LLM — JSON inválido, `content=None` (recusa
+    dura do provider), objeto sem a chave 'threats' — viram STRIDEParsingError,
+    NÃO exceção crua. Isso é crucial: STRIDEParsingError é capturada por
+    `analyze_with_validation_retry`, que aciona o retry de validação e, esgotado,
+    o fallback por-componente (stride_entries=[]). Sem isso, um `JSONDecodeError`/
+    `KeyError`/`TypeError` escaparia das duas camadas de retry e abortaria a
+    análise inteira (relevante no Gemini via endpoint OpenAI-compat, onde o
+    `strict` do json_schema não é garantido).
+    """
+    if is_json_string:
+        try:
+            payload = json.loads(payload)
+        except (TypeError, ValueError) as exc:  # TypeError: content=None; ValueError: JSONDecodeError
+            raise STRIDEParsingError(f"Resposta do LLM não é JSON válido: {exc}") from exc
+    if not isinstance(payload, dict) or "threats" not in payload:
+        shape = list(payload) if isinstance(payload, dict) else type(payload).__name__
+        raise STRIDEParsingError(f"Resposta do LLM sem a chave 'threats' esperada ({shape})")
+    return json.dumps(payload["threats"])
+
+
 class LLMAnalysisClient:
     def __init__(self, provider: Optional[str] = None):
         self.provider = provider or ANALYSIS_LLM_PROVIDER
@@ -172,7 +195,7 @@ class LLMAnalysisClient:
         )
         for block in response.content:
             if getattr(block, "type", None) == "tool_use" and block.name == _TOOL_NAME:
-                return json.dumps(block.input["threats"])
+                return _unwrap_threats(block.input, is_json_string=False)
         raise GenerationError("Resposta Anthropic sem bloco tool_use esperado")
 
     def _call_openai(self, system_prompt: str, user_prompt: str, json_schema: dict) -> str:
@@ -221,8 +244,7 @@ class LLMAnalysisClient:
             getattr(usage, "completion_tokens", None),
         )
         content = response.choices[0].message.content
-        data = json.loads(content)
-        return json.dumps(data["threats"])
+        return _unwrap_threats(content, is_json_string=True)
 
     def _log_usage(self, input_tokens, output_tokens) -> None:
         # NUNCA logar conteúdo da resposta — apenas contagens/metadados.

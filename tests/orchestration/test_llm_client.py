@@ -14,7 +14,8 @@ import httpx
 import pytest
 
 from orchestration.exceptions import GenerationError
-from orchestration.llm_client import LLMAnalysisClient
+from orchestration.llm_client import LLMAnalysisClient, analyze_with_validation_retry
+from orchestration.parser import STRIDEParsingError
 from orchestration.prompts import stride_entries_json_schema
 
 _ENTRY = {
@@ -190,3 +191,69 @@ def test_pacing_desligado_nao_dorme(monkeypatch):
 
     mod._respect_pacing()
     assert sleeps == []
+
+
+# ---------------------------------------------------------------------------
+# Resposta malformada — deve virar STRIDEParsingError (retry de validação +
+# fallback por-componente), NUNCA exceção crua que aborta o grafo.
+# ---------------------------------------------------------------------------
+
+
+def _openai_response_content(content):
+    """Resposta OpenAI/Gemini com um `content` arbitrário (inclusive None)."""
+    msg = SimpleNamespace(content=content)
+    choice = SimpleNamespace(message=msg)
+    usage = SimpleNamespace(prompt_tokens=5, completion_tokens=7)
+    return SimpleNamespace(choices=[choice], usage=usage)
+
+
+@pytest.mark.parametrize(
+    "content, motivo",
+    [
+        ("desculpe, não posso ajudar com isso", "recusa em texto (não é JSON)"),
+        (None, "content=None (recusa dura do provider)"),
+        (json.dumps({"foo": 1}), "JSON válido mas sem a chave 'threats'"),
+        ("{isto não é json", "JSON truncado/inválido"),
+    ],
+)
+def test_openai_resposta_malformada_vira_parsing_error(content, motivo):
+    with patch("orchestration.llm_client.openai.OpenAI") as MockClient:
+        MockClient.return_value.chat.completions.create.return_value = (
+            _openai_response_content(content)
+        )
+        client = LLMAnalysisClient(provider="openai")
+        with pytest.raises(STRIDEParsingError):
+            client.analyze("sys", "user", _schema())
+
+
+def test_anthropic_tool_input_sem_threats_vira_parsing_error():
+    block = SimpleNamespace(
+        type="tool_use", name="submit_stride_threats", input={"errado": []}
+    )
+    resp = SimpleNamespace(
+        content=[block], usage=SimpleNamespace(input_tokens=1, output_tokens=1)
+    )
+    with patch("orchestration.llm_client.anthropic.Anthropic") as MockClient:
+        MockClient.return_value.messages.create.return_value = resp
+        client = LLMAnalysisClient(provider="anthropic")
+        with pytest.raises(STRIDEParsingError):
+            client.analyze("sys", "user", _schema())
+
+
+def test_validation_retry_absorve_malformado_sem_abortar():
+    # A garantia central da correção: resposta malformada NÃO propaga exceção
+    # crua — vira retry de validação e, esgotado, fallback (entries=[] +
+    # last_error). É isso que impede 1 componente de derrubar os 14.
+    with patch("orchestration.llm_client.openai.OpenAI") as MockClient:
+        MockClient.return_value.chat.completions.create.return_value = (
+            _openai_response_content("não é json")
+        )
+        client = LLMAnalysisClient(provider="openai")
+        entries, raw, error = analyze_with_validation_retry(
+            client, "sys", "user", _schema()
+        )
+
+    assert entries == []
+    assert isinstance(error, STRIDEParsingError)
+    # 2 tentativas de validação (inicial + 1 retry) foram feitas.
+    assert MockClient.return_value.chat.completions.create.call_count == 2

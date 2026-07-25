@@ -162,7 +162,20 @@ def example_stride_report() -> STRIDEReport:
             "D": ["c2"],
             "E": [],
         },
-        risk_summary={"critical": 1, "high": 2, "medium": 1, "low": 0},
+        risk_summary={
+            # espelha o shape enriquecido emitido por generate_report (report.py):
+            # contagens por severidade + agregados por categoria/cobertura/falhas.
+            "critical": 1,
+            "high": 2,
+            "medium": 1,
+            "low": 0,
+            "total_threats": 4,
+            "by_category": {"S": 1, "T": 1, "R": 0, "I": 1, "D": 1, "E": 0},
+            "components_analyzed": 2,
+            "components_with_threats": 2,
+            "components_without_threats": 0,
+            "components_failed": 0,
+        },
     )
 
 
@@ -176,6 +189,7 @@ def example_graph_state() -> GraphState:
         "current_component_id": "c2",
         "kg_results": {},
         "component_analyses": analyses,
+        "failed_component_ids": [],
         "chat_history": [],
         "hitl_feedback": None,
         "hitl_approved": True,
