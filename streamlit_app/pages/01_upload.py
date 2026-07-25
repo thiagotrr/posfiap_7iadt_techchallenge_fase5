@@ -89,7 +89,7 @@ if uploaded_file is not None:
         st.error(error)
     elif st.button("Extrair Diagrama", type="primary"):
         client = APIClient(base_url=API_BASE_URL)
-        with st.spinner("Extraindo componentes via LLM..."):
+        with st.spinner("Extraindo componentes via visão computacional (YOLOv8)..."):
             try:
                 diagram = client.extract_diagram(
                     image_bytes=uploaded_file.getvalue(),
