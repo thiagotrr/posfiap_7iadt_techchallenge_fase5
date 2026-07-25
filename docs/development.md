@@ -106,6 +106,20 @@ cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
+## Rodar o Streamlit fora do Docker
+
+Com a API já rodando (via Docker ou `uvicorn app.main:app --reload`, ver
+seção acima):
+
+```bash
+export API_BASE_URL=http://localhost:8000/api/v1   # default já é este valor fora do Docker
+streamlit run streamlit_app/main.py
+```
+
+Acessar em http://localhost:8501. A sidebar mostra o status de conexão com a
+API (`GET /api/v1/health`); se aparecer "API indisponível", confirme que a
+API está de pé na porta configurada.
+
 ## Rodar os testes
 
 ```bash

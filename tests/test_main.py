@@ -17,6 +17,11 @@ def test_health_check_returns_200_and_expected_body():
     body = response.json()
     assert body["status"] == "ok"
     assert body["version"] == "1.0.0"
+    assert body["modules"] == {
+        "extraction": "available",
+        "knowledge": "available",
+        "orchestration": "available",
+    }
 
 
 def test_unknown_route_returns_404_with_structured_json():
