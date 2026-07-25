@@ -9,7 +9,15 @@ health_router = APIRouter(tags=["health"])
 
 @health_router.get("/health")
 def health_check() -> dict:
-    return {"status": "ok", "version": "1.0.0"}
+    return {
+        "status": "ok",
+        "version": "1.0.0",
+        "modules": {
+            "extraction": "available",
+            "knowledge": "available",
+            "orchestration": "available",
+        },
+    }
 
 
 def register_routers(app: FastAPI) -> None:
