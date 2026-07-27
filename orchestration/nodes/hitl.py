@@ -25,7 +25,8 @@ logger = logging.getLogger(__name__)
 
 def _build_hitl_summary(state: GraphState) -> list[dict]:
     """Resumo por componente para o usuário decidir (alimenta hitl_summary do
-    GraphStateResponse)."""
+    GraphStateResponse). Inclui `threats` (texto do LLM: nome, categoria,
+    severidade, justificativa e mitigações de cada ameaça)."""
     resumo: list[dict] = []
     for component_id, analysis in state["component_analyses"].items():
         resumo.append(
@@ -33,6 +34,7 @@ def _build_hitl_summary(state: GraphState) -> list[dict]:
                 "component_id": component_id,
                 "component_name": analysis.component_name,
                 "threats_count": len(analysis.stride_entries),
+                "threats": [entry.model_dump() for entry in analysis.stride_entries],
             }
         )
     return resumo

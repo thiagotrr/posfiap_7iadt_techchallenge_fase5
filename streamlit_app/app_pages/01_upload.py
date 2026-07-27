@@ -1,4 +1,4 @@
-"""streamlit_app/pages/01_upload.py
+"""streamlit_app/app_pages/01_upload.py
 
 Tela de upload do diagrama (US-2.2)."""
 import sys
@@ -101,7 +101,15 @@ if uploaded_file is not None:
             else:
                 reset_downstream_state(st.session_state)
                 st.session_state["diagram"] = diagram
-                st.switch_page("pages/02_extraction_review.py")
+                try:
+                    st.session_state["diagram_preview_image"] = client.get_extraction_preview(
+                        image_bytes=uploaded_file.getvalue(),
+                        filename=uploaded_file.name,
+                        mime_type=uploaded_file.type,
+                    )
+                except APIError:
+                    st.session_state["diagram_preview_image"] = None
+                st.switch_page("app_pages/02_extraction_review.py")
             finally:
                 client.close()
 
@@ -112,4 +120,5 @@ if st.button("Usar Diagrama de Exemplo"):
 
     reset_downstream_state(st.session_state)
     st.session_state["diagram"] = example_diagram.model_dump()
-    st.switch_page("pages/02_extraction_review.py")
+    st.session_state["diagram_preview_image"] = None  # exemplo não tem imagem-fonte pra anotar
+    st.switch_page("app_pages/02_extraction_review.py")

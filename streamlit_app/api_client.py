@@ -84,6 +84,25 @@ class APIClient:
             timeout=120.0,
         )
 
+    def get_extraction_preview(self, image_bytes: bytes, filename: str, mime_type: str) -> bytes:
+        """Busca a imagem anotada (caixas/labels do YOLO) para a mesma imagem
+        de extract_diagram(), para conferência visual -- resposta binária
+        (PNG), não passa por _request_json (que espera JSON)."""
+        try:
+            response = self._client.request(
+                "POST",
+                "extraction/diagram/preview",
+                files={"image": (filename, image_bytes, mime_type)},
+                timeout=120.0,
+            )
+        except Exception as exc:
+            raise APIError(status_code=502, error="ConnectionError", detail=str(exc)) from exc
+
+        if response.status_code >= 400:
+            raise _parse_error_response(response)
+
+        return response.content
+
     def apply_patch(self, diagram: dict, patch: dict) -> dict:
         return self._request_json(
             "POST",

@@ -207,7 +207,7 @@ class LLMAnalysisClient:
     def _call_gemini(self, system_prompt: str, user_prompt: str, json_schema: dict) -> str:
         # Gemini via endpoint OpenAI-compatível do Google. Reusa o cliente openai.
         client = openai.OpenAI(
-            api_key=os.environ.get("GEMINI_API_KEY"),
+            api_key=os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY"),
             base_url=_GEMINI_BASE_URL,
             timeout=ANALYSIS_LLM_TIMEOUT_S,
         )

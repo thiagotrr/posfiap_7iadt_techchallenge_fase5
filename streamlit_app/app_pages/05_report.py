@@ -1,4 +1,4 @@
-"""streamlit_app/pages/05_report.py
+"""streamlit_app/app_pages/05_report.py
 
 Tela de relatório final com a matriz STRIDE (US-3.2)."""
 import json
@@ -38,7 +38,7 @@ if report is None and thread_id:
     except APIError as exc:
         st.error(f"{exc.error}: {exc.detail}")
         if st.button("Voltar para a Revisão HITL"):
-            st.switch_page("pages/04_hitl_review.py")
+            st.switch_page("app_pages/04_hitl_review.py")
         st.stop()
     finally:
         client.close()
@@ -106,4 +106,4 @@ with button_col2:
     if st.button("🔄 Nova Análise"):
         reset_downstream_state(st.session_state)
         st.session_state["diagram"] = None
-        st.switch_page("pages/01_upload.py")
+        st.switch_page("app_pages/01_upload.py")

@@ -22,7 +22,7 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 logging.basicConfig(level="INFO", format="%(asctime)s [%(levelname)s] %(name)s — %(message)s")
 logger = logging.getLogger(__name__)
@@ -139,3 +139,34 @@ async def predict(image: UploadFile) -> JSONResponse:
             return JSONResponse(status_code=500, content={"error": "DetectionFailedError", "detail": str(exc)})
 
     return JSONResponse(status_code=200, content=diagram.model_dump())
+
+
+@app.post("/predict/preview")
+async def predict_preview(image: UploadFile) -> Response:
+    """Mesma detecção de /predict, mas devolve a imagem anotada (caixas/labels
+    do YOLO) em vez do ArchitectureDiagram -- usado para conferência visual
+    na revisão HITL (extraction/service.py::extract_diagram_preview)."""
+    if not _WEIGHTS_PATH.exists():
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": "WeightsNotFoundError",
+                "detail": f"Pesos treinados não encontrados. Baixe manualmente: {_MANUAL_DOWNLOAD_HINT}",
+            },
+        )
+
+    from predict import annotate_image  # import tardio: só quem chama /predict* paga o custo de carregar torch
+
+    image_bytes = await image.read()
+    suffix = Path(image.filename or "diagram.png").suffix or ".png"
+
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=True) as tmp:
+        tmp.write(image_bytes)
+        tmp.flush()
+        try:
+            png_bytes = annotate_image(tmp.name)
+        except Exception as exc:
+            logger.exception("Anotação falhou")
+            return JSONResponse(status_code=500, content={"error": "DetectionFailedError", "detail": str(exc)})
+
+    return Response(content=png_bytes, media_type="image/png")

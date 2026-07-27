@@ -122,6 +122,54 @@ def _extract_via_import(image_bytes: bytes, mime_type: str) -> ArchitectureDiagr
             raise ExtractionFailedError("Falha ao extrair diagrama da imagem enviada") from e
 
 
+def extract_diagram_preview(image_bytes: bytes, mime_type: str = "image/png") -> bytes:
+    """Gera a imagem anotada (caixas/labels do YOLO) para a mesma imagem
+    enviada a extract_diagram(), para conferência visual na revisão HITL.
+    Mesmos dois modos (HTTP/import), escolhidos pela mesma variável de
+    ambiente -- ver docstring do módulo."""
+    vision_detector_url = os.environ.get("VISION_DETECTOR_URL")
+    if vision_detector_url:
+        return _preview_via_http(vision_detector_url, image_bytes, mime_type)
+    return _preview_via_import(image_bytes, mime_type)
+
+
+def _preview_via_http(base_url: str, image_bytes: bytes, mime_type: str) -> bytes:
+    import httpx  # import tardio: só quem usa o modo HTTP precisa disso carregado
+
+    suffix = _MIME_TO_SUFFIX.get(mime_type, ".png")
+    try:
+        response = httpx.post(
+            f"{base_url.rstrip('/')}/predict/preview",
+            files={"image": (f"diagram{suffix}", image_bytes, mime_type)},
+            timeout=_HTTP_TIMEOUT_S,
+        )
+        response.raise_for_status()
+        return response.content
+    except httpx.HTTPError as e:
+        logger.error("Extraction preview failed (http, url=%s) - %s", base_url, e)
+        raise ExtractionFailedError(
+            f"Falha ao gerar preview via serviço vision-detector ({base_url})"
+        ) from e
+
+
+def _preview_via_import(image_bytes: bytes, mime_type: str) -> bytes:
+    suffix = _MIME_TO_SUFFIX.get(mime_type, ".png")
+
+    if str(_VISION_DETECTOR_DIR) not in sys.path:
+        sys.path.insert(0, str(_VISION_DETECTOR_DIR))
+
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=True) as tmp:
+        tmp.write(image_bytes)
+        tmp.flush()
+        try:
+            from predict import annotate_image  # import tardio: evita torch/cv2 no import do pacote
+
+            return annotate_image(tmp.name)
+        except Exception as e:
+            logger.error("Extraction preview failed (import) - %s", e)
+            raise ExtractionFailedError("Falha ao gerar preview da imagem enviada") from e
+
+
 def _find_index(items: list[dict], element_id: str) -> int | None:
     return next((i for i, el in enumerate(items) if el.get("id") == element_id), None)
 

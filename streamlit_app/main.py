@@ -24,11 +24,11 @@ st.set_page_config(page_title="AI Centric STRIDE Analyzer", page_icon="🛡️",
 init_session_state(st.session_state)
 
 PAGES = [
-    st.Page(str(_STREAMLIT_APP_DIR / "pages/01_upload.py"), title="Upload do Diagrama", icon="📤", default=True),
-    st.Page(str(_STREAMLIT_APP_DIR / "pages/02_extraction_review.py"), title="Revisão da Extração", icon="🔍"),
-    st.Page(str(_STREAMLIT_APP_DIR / "pages/03_analysis.py"), title="Análise STRIDE", icon="⚙️"),
-    st.Page(str(_STREAMLIT_APP_DIR / "pages/04_hitl_review.py"), title="Revisão HITL", icon="💬"),
-    st.Page(str(_STREAMLIT_APP_DIR / "pages/05_report.py"), title="Relatório Final", icon="📊"),
+    st.Page(str(_STREAMLIT_APP_DIR / "app_pages/01_upload.py"), title="Upload do Diagrama", icon="📤", default=True),
+    st.Page(str(_STREAMLIT_APP_DIR / "app_pages/02_extraction_review.py"), title="Revisão da Extração", icon="🔍"),
+    st.Page(str(_STREAMLIT_APP_DIR / "app_pages/03_analysis.py"), title="Análise STRIDE", icon="⚙️"),
+    st.Page(str(_STREAMLIT_APP_DIR / "app_pages/04_hitl_review.py"), title="Revisão HITL", icon="💬"),
+    st.Page(str(_STREAMLIT_APP_DIR / "app_pages/05_report.py"), title="Relatório Final", icon="📊"),
 ]
 
 pg = st.navigation(PAGES)

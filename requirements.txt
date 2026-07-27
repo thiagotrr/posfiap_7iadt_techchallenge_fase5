@@ -18,6 +18,7 @@ neo4j==5.25.0
 python-multipart==0.0.12
 
 streamlit==1.40.0
+pyarrow==17.0.0
 
 httpx==0.28.1
 requests==2.34.2
