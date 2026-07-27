@@ -227,16 +227,29 @@ def _ocr_boundary_label(image, box):
 _OCR_STRIP_CHARS = "-—_=|~*.,;:!?[]{}\"'“”‘’"
 
 
+def _is_ocr_gibberish_token(tok):
+    """Limpeza de lixo gerado por OCR em crop pequeno/multi-linha (ver _clean_ocr_text)"""
+    letters = [c.lower() for c in tok if c.isalpha()]
+    if len(letters) < 3:
+        return False
+    distinct = len(set(letters))
+    if len(letters) == 3:
+        return distinct == 1
+    return distinct <= 2
+
+
 def _clean_ocr_text(text):
     """Limpa ruido tipico do OCR num crop pequeno/multi-linha: colapsa
     espaco/quebra-de-linha e descarta TOKENS que sao so pontuacao/simbolo
-    (ex.: "——", "||", ")" solto) ou letras isoladas de 1-2 chars minusculas
+    (ex.: "——", "||", ")" solto), letras isoladas de 1-2 chars minusculas
     (ex.: "S", "I", "l", "ee", "ue" -- quase sempre ruido, um rotulo de
-    servico de verdade nao tem "palavra" assim tao curta). NAO tenta
-    corrigir erro de LEITURA de caractere (ex.: "Amazoa" por "Amazon") --
-    so formatacao/ruido estrutural, que e o que sobra depois do psm 6 +
-    upscale de _ocr_text ainda "alucinar" pontuacao solta em volta do texto
-    de verdade. Mantem parenteses ("(Secondary)", "(memcached)") porque sao
+    servico de verdade nao tem "palavra" assim tao curta) ou "alucinacao"
+    de letra repetida tipo "SESE"/"EEE"/"Reeeee" (ver
+    _is_ocr_gibberish_token). NAO tenta corrigir erro de LEITURA de
+    caractere (ex.: "Amazoa" por "Amazon") -- so formatacao/ruido
+    estrutural, que e o que sobra depois do psm 6 + upscale de _ocr_text
+    ainda "alucinar" pontuacao/letra repetida solta em volta do texto de
+    verdade. Mantem parenteses ("(Secondary)", "(memcached)") porque sao
     qualificador de instancia de verdade no estilo do diagrama de
     referencia, nao ruido."""
     if not text:
@@ -247,6 +260,8 @@ def _clean_ocr_text(text):
         if not stripped or not any(c.isalnum() for c in stripped):
             continue
         if stripped.isalpha() and (len(stripped) == 1 or (len(stripped) == 2 and stripped.islower())):
+            continue
+        if _is_ocr_gibberish_token(stripped):
             continue
         cleaned.append(stripped)
     return " ".join(cleaned)
@@ -324,6 +339,35 @@ def _match_aws_service(text):
                 if best is None or len(norm) > len(_normalize_for_match(best)):
                     best = name
     return best
+
+
+def _strip_ocr_noise_prefix(text, matched_service):
+    """Remove ruído de OCR ANTES do nome de serviço reconhecido (ex.: "ont
+    AWS WAF" -> "AWS WAF", já que AWS_SERVICE_NAMES guarda só "WAF" --
+    ver _match_aws_service). Preserva um prefixo "AWS"/"Amazon" logo antes
+    do match (convenção real de nomenclatura, não ruído -- ver comentário em
+    _match_aws_service sobre esse prefixo não fazer parte do nome
+    cadastrado). Só mexe no que vem ANTES do match -- o que vem DEPOIS (ex.:
+    qualificador de instância entre parênteses, "(Master)") é preservado com
+    a formatação original char a char, pra não arriscar cortar informação de
+    verdade. Retorna `text` inalterado se `matched_service` for None ou não
+    achar uma janela de palavras que bata exatamente com ele (ex.: quando o
+    match veio do fuzzy de string inteira em vez da janela de palavras)."""
+    if not matched_service or not text:
+        return text
+    target_norm = _normalize_for_match(matched_service)
+    word_matches = list(re.finditer(r"[a-zA-Z0-9]+", text))
+    words = [m.group() for m in word_matches]
+    for start in range(len(words)):
+        acc = ""
+        for end in range(start, min(start + 3, len(words))):
+            acc += words[end].lower()
+            if _normalize_for_match(acc) == target_norm:
+                keep_from = start
+                if start > 0 and words[start - 1].lower() in ("aws", "amazon"):
+                    keep_from = start - 1
+                return text[word_matches[keep_from].start():].strip()
+    return text
 
 
 def _ocr_flow_protocol(image, tip, far_point):
@@ -519,7 +563,16 @@ def build_components(component_dets, boundaries, image):
         # _ocr_component_label) -- sem newline embutido, sem token que e so
         # pontuacao/letra solta.
         label_text = _ocr_component_label(image, d.box)
-        aws_service = detected_service or _match_aws_service(label_text)
+        # so tenta casar/limpar via OCR quando a deteccao NAO ja veio com um
+        # servico especifico (nesse caso o rotulo de exibicao fica com o
+        # texto bruto do OCR mesmo, sem tentar casar contra AWS_SERVICE_NAMES).
+        ocr_matched_service = None if detected_service else _match_aws_service(label_text)
+        aws_service = detected_service or ocr_matched_service
+        # remove ruido de OCR ANTES do nome de servico reconhecido (ex.:
+        # "ont AWS WAF" -> "AWS WAF") sem arriscar cortar qualificador de
+        # instancia de verdade depois do match (ex.: "(Master)") -- ver
+        # docstring de _strip_ocr_noise_prefix.
+        display_name = _strip_ocr_noise_prefix(label_text, ocr_matched_service)
         raw_fallback = False
         if aws_service is None and label_text and len(label_text) >= 3:
             # nao veio da deteccao nem bateu com AWS_SERVICE_NAMES via OCR,
@@ -543,8 +596,10 @@ def build_components(component_dets, boundaries, image):
             # (Master)"), senao cai no placeholder "{Arquétipo em PT-BR} {n}"
             # -- so o rotulo de EXIBICAO e traduzido (ARCHETYPE_LABEL_PT); o
             # `category` continua no identificador em ingles (ver comentario
-            # em class_to_archetype.py::ARCHETYPE_LABEL_PT).
-            "name": label_text if label_text else f"{ARCHETYPE_LABEL_PT.get(category, category)} {idx}",
+            # em class_to_archetype.py::ARCHETYPE_LABEL_PT). display_name ja
+            # vem com ruido de OCR antes do nome de servico removido (ver
+            # _strip_ocr_noise_prefix) quando aplicavel.
+            "name": display_name if display_name else f"{ARCHETYPE_LABEL_PT.get(category, category)} {idx}",
             "aws_service": aws_service,
             "category": category,
             "element_type": ELEMENT_TYPE_OF.get(category, DEFAULT_ELEMENT_TYPE),
@@ -677,6 +732,21 @@ def detect_architecture(image_path: str) -> ArchitectureDiagram:
     ]
     result.save(filename="deteccao_saida.jpg")
     return build_architecture_diagram(dets, result.orig_img)
+
+
+def annotate_image(image_path: str) -> bytes:
+    """Roda a mesma detecção de detect_architecture() e devolve a imagem com
+    as caixas/labels do YOLO desenhadas (PNG), para conferência visual na
+    revisão HITL -- não retorna o ArchitectureDiagram, só a imagem."""
+    from ultralytics import YOLO  # import tardio: so quem roda inferencia precisa de torch/ultralytics
+
+    model = YOLO(WEIGHTS)
+    result = model.predict(source=image_path, conf=CONF, imgsz=IMGSZ, verbose=False)[0]
+    annotated = result.plot()  # numpy array BGR com caixas/labels desenhados
+    ok, buf = cv2.imencode(".png", annotated)
+    if not ok:
+        raise RuntimeError("Falha ao codificar a imagem anotada como PNG")
+    return buf.tobytes()
 
 
 if __name__ == "__main__":

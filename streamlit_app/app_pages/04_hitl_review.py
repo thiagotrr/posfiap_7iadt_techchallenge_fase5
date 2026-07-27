@@ -1,13 +1,16 @@
-"""streamlit_app/pages/04_hitl_review.py
+"""streamlit_app/app_pages/04_hitl_review.py
 
 Tela de revisão HITL com chat de refinamento (US-3.1).
 
 `GraphStateResponse` (contrato real da orquestração) não expõe um
-`chat_history` do servidor nem a contagem de ameaças por categoria STRIDE
-antes do relatório final -- só `hitl_summary` (component_id, component_name,
-threats_count). Por isso o histórico de chat exibido aqui é local à sessão do
-Streamlit: cada refinamento vira uma mensagem do usuário + uma mensagem de
-resumo (não uma resposta textual do LLM, que a API não retorna)."""
+`chat_history` do servidor -- só `hitl_summary` (component_id, component_name,
+threats_count, threats). Por isso o histórico de chat exibido aqui é local à
+sessão do Streamlit: cada refinamento vira uma mensagem do usuário + uma
+mensagem de resumo (não uma resposta textual do LLM, que a API não retorna).
+`threats`, por outro lado, já traz o texto gerado pelo LLM para cada ameaça
+(nome, categoria, severidade, justificativa e mitigações -- mesmo formato de
+`STRIDEThreatEntry`), permitindo revisar o conteúdo antes de aprovar ou
+refinar, não só a contagem."""
 import sys
 from pathlib import Path
 
@@ -21,6 +24,7 @@ import streamlit as st
 
 from api_client import APIClient, APIError
 from config import API_BASE_URL, init_session_state
+from stride_report import category_badge_html, severity_badge_html
 
 init_session_state(st.session_state)
 st.session_state.setdefault("hitl_chat_history", [])
@@ -36,7 +40,7 @@ if not thread_id or not state:
 
 if state.get("status") == "completed":
     st.session_state["report"] = state.get("report")
-    st.switch_page("pages/05_report.py")
+    st.switch_page("app_pages/05_report.py")
 
 if state.get("status") == "error":
     st.error(state.get("error_detail") or "A análise terminou em erro no servidor.")
@@ -56,6 +60,23 @@ st.dataframe(
     ],
     use_container_width=True,
 )
+
+st.subheader("Ameaças identificadas")
+for item in hitl_summary:
+    with st.expander(f"{item['component_name']} ({item['threats_count']} ameaças)"):
+        threats = item.get("threats") or []
+        if not threats:
+            st.info("Nenhuma ameaça identificada para este componente.")
+        for threat in threats:
+            st.markdown(
+                f"{category_badge_html(threat['category'])} **{threat['threat_name']}** "
+                f"&nbsp; {severity_badge_html(threat['severity'])}",
+                unsafe_allow_html=True,
+            )
+            st.markdown(threat["threat_description"])
+            if threat.get("mitigations"):
+                st.caption("Mitigações: " + "; ".join(threat["mitigations"]))
+            st.markdown("---")
 
 refinement_turns = sum(1 for m in st.session_state["hitl_chat_history"] if m["role"] == "user")
 st.caption(f"Refinamentos nesta sessão: {refinement_turns}")
@@ -102,7 +123,7 @@ if st.button("✅ Aprovar e Gerar Relatório", type="primary"):
             st.session_state["analysis_state"] = response
             if response.get("status") == "completed":
                 st.session_state["report"] = response.get("report")
-                st.switch_page("pages/05_report.py")
+                st.switch_page("app_pages/05_report.py")
             else:
                 st.warning("A aprovação não gerou o relatório esperado. Tente novamente.")
         finally:

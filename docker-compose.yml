@@ -95,6 +95,8 @@ services:
       - "${STREAMLIT_PORT:-8501}:8501"
     env_file:
       - .env
+    environment:
+      API_BASE_URL: http://api:8000/api/v1
     depends_on:
       - api
 

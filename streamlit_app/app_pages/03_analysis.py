@@ -1,4 +1,4 @@
-"""streamlit_app/pages/03_analysis.py
+"""streamlit_app/app_pages/03_analysis.py
 
 Tela de disparo e acompanhamento da análise STRIDE (US-2.4 / Épico 3).
 
@@ -51,10 +51,10 @@ status = state.get("status")
 
 if status == "hitl_pending":
     st.info("Análise concluída. Redirecionando para a revisão HITL...")
-    st.switch_page("pages/04_hitl_review.py")
+    st.switch_page("app_pages/04_hitl_review.py")
 elif status == "completed":
     st.session_state["report"] = state.get("report")
-    st.switch_page("pages/05_report.py")
+    st.switch_page("app_pages/05_report.py")
 elif status == "error":
     st.error(state.get("error_detail") or "A análise terminou em erro no servidor.")
     if st.button("Tentar novamente", type="primary"):

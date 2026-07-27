@@ -34,7 +34,7 @@ def test_main_sidebar_shows_offline_badge_when_no_api_running():
 
 
 def test_upload_page_loads_directly_and_shows_title():
-    at = AppTest.from_file("streamlit_app/pages/01_upload.py")
+    at = AppTest.from_file("streamlit_app/app_pages/01_upload.py")
     at.run()
 
     assert not at.exception

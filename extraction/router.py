@@ -14,7 +14,7 @@ import os
 
 import httpx
 from fastapi import APIRouter, UploadFile
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
 from extraction.exceptions import (
@@ -23,7 +23,7 @@ from extraction.exceptions import (
     PatchValidationError,
 )
 from extraction.schemas import ArchitectureDiagram, DiagramPatch
-from extraction.service import apply_patch, extract_diagram
+from extraction.service import apply_patch, extract_diagram, extract_diagram_preview
 
 logger = logging.getLogger(__name__)
 router = APIRouter(tags=["extraction"])
@@ -91,6 +91,32 @@ async def create_diagram(image: UploadFile) -> JSONResponse:
         )
 
     return JSONResponse(status_code=200, content=diagram.model_dump())
+
+
+@router.post("/diagram/preview")
+async def create_diagram_preview(image: UploadFile) -> Response:
+    """
+    Gera a imagem anotada (caixas/labels do YOLOv8) para a mesma imagem
+    enviada a POST /diagram, para conferência visual na revisão HITL.
+    Não retorna o ArchitectureDiagram, só a imagem.
+
+    Returns:
+        200 — imagem PNG anotada.
+        502 — vision-detector inacessível ou a anotação falhou.
+    """
+    image_bytes = await image.read()
+    mime_type = image.content_type or "image/png"
+
+    try:
+        png_bytes = extract_diagram_preview(image_bytes, mime_type=mime_type)
+    except ExtractionFailedError as exc:
+        logger.error("Diagram preview failed - %s", exc)
+        return JSONResponse(
+            status_code=502,
+            content={"error": "ExtractionFailedError", "detail": str(exc)},
+        )
+
+    return Response(content=png_bytes, media_type="image/png")
 
 
 class DiagramPatchRequest(BaseModel):

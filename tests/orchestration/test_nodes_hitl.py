@@ -84,6 +84,12 @@ def test_grafo_pausa_no_hitl_com_summary():
     assert payload["type"] == "hitl_review"
     assert len(payload["summary"]) == 2           # 2 componentes analisados
     assert payload["summary"][0]["threats_count"] == 1
+    # `threats` traz o texto do LLM
+    threat = payload["summary"][0]["threats"][0]
+    assert threat["threat_name"] == "[MOCK] Spoofing"
+    assert threat["threat_description"] == "Ameaça mock."
+    assert threat["severity"] == "medium"
+    assert threat["mitigations"] == ["m"]
 
 
 def test_approve_gera_relatorio():

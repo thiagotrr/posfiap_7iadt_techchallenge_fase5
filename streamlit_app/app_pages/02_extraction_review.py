@@ -1,4 +1,4 @@
-"""streamlit_app/pages/02_extraction_review.py
+"""streamlit_app/app_pages/02_extraction_review.py
 
 Tela de revisão e HITL de correção da extração (US-2.3)."""
 import json
@@ -34,6 +34,46 @@ alert_function = alert_functions.get(
     confidence_level(diagram["diagram_metadata"]["extraction_confidence"]), st.info
 )
 alert_function(f"Confiança da extração: {diagram['diagram_metadata']['extraction_confidence']}")
+
+preview_image = st.session_state.get("diagram_preview_image")
+if preview_image:
+    st.markdown(
+        """
+        <style>
+        [data-testid="stElementToolbar"] {
+            opacity: 1 !important;
+        }
+        [data-testid="stElementToolbarButton"] {
+            background-color: rgba(0, 0, 0, 0.6) !important;
+            border-radius: 6px !important;
+        }
+        [data-testid="stElementToolbarButton"] svg {
+            fill: white !important;
+        }
+        [data-testid="stElementToolbar"]:has(button[aria-label="Close fullscreen"])
+            [data-testid="stElementToolbarButton"] {
+            transform: scale(1.6);
+            background-color: rgba(220, 38, 38, 0.9) !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    with st.expander("🖼️ Ver detecção visual (YOLOv8)"):
+        preview_col, _ = st.columns([1, 1])
+        with preview_col:
+            st.image(
+                preview_image,
+                caption="Componentes detectados pelo modelo",
+                use_container_width=True,
+            )
+            st.download_button(
+                "⬇️ Baixar imagem",
+                data=preview_image,
+                file_name="deteccao_yolo.png",
+                mime="image/png",
+            )
 
 st.subheader("Componentes")
 st.dataframe(
@@ -149,4 +189,4 @@ if st.button(
     disabled=is_low_confidence and not confirm_low_confidence,
     type="primary",
 ):
-    st.switch_page("pages/03_analysis.py")
+    st.switch_page("app_pages/03_analysis.py")
